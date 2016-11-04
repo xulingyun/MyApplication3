@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:background="@color/red">
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:id="@+id/song_next"
+        android:gravity="center_vertical"
+        android:drawablePadding="@dimen/drawable_pidding"
+        android:drawableLeft="@drawable/ic_slow_motion_video_blue_a100_36dp"
+        android:text="@string/song_next"
+        android:layout_height="wrap_content" />
+    <android.support.v7.widget.AppCompatTextView
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:id="@+id/song_collect"
+        android:drawablePadding="@dimen/drawable_pidding"
+        android:drawableLeft="@drawable/ic_collections_bookmark_blue_a100_36dp"
+        android:text="@string/song_collect"
+        android:layout_height="wrap_content" />
+    <android.support.v7.widget.AppCompatTextView
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:drawablePadding="@dimen/drawable_pidding"
+        android:id="@+id/song_comment"
+        android:drawableLeft="@drawable/ic_chat_blue_a100_36dp"
+        android:text="@string/song_comment"
+        android:layout_height="wrap_content" />
+    <android.support.v7.widget.AppCompatTextView
+        android:gravity="center_vertical"
+        android:drawablePadding="@dimen/drawable_pidding"
+        android:layout_width="match_parent"
+        android:id="@+id/song_share"
+        android:drawableLeft="@drawable/ic_share_blue_a100_36dp"
+        android:text="@string/song_share"
+        android:layout_height="wrap_content" />
+    <android.support.v7.widget.AppCompatTextView
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:drawablePadding="@dimen/drawable_pidding"
+        android:id="@+id/song_delete"
+        android:drawableLeft="@drawable/ic_delete_blue_a100_36dp"
+        android:text="@string/song_delete"
+        android:layout_height="wrap_content" />
+    <android.support.v7.widget.AppCompatTextView
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:drawablePadding="@dimen/drawable_pidding"
+        android:id="@+id/song_songer"
+        android:drawableLeft="@drawable/ic_person_pin_blue_a100_36dp"
+        android:text="@string/song_songer"
+        android:layout_height="wrap_content" />
+    <android.support.v7.widget.AppCompatTextView
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:drawablePadding="@dimen/drawable_pidding"
+        android:id="@+id/song_album"
+        android:drawableLeft="@drawable/ic_album_blue_a100_36dp"
+        android:text="@string/song_album"
+        android:layout_height="wrap_content" />
+    <android.support.v7.widget.AppCompatTextView
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:drawablePadding="@dimen/drawable_pidding"
+        android:id="@+id/song_mv"
+        android:drawableLeft="@drawable/ic_ondemand_video_blue_a100_36dp"
+        android:text="@string/song_mv"
+        android:layout_height="wrap_content" />
+    <android.support.v7.widget.AppCompatTextView
+        android:gravity="center_vertical"
+        android:drawablePadding="@dimen/drawable_pidding"
+        android:layout_width="match_parent"
+        android:id="@+id/song_ring"
+        android:drawableLeft="@drawable/ic_phonelink_ring_blue_a100_36dp"
+        android:text="@string/song_ring"
+        android:layout_height="wrap_content" />
+</LinearLayout>

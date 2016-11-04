@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:id="@+id/music_item"
+                android:layout_height="wrap_content">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:layout_alignParentStart="true"
+        android:id="@+id/album_imageview"
+        android:layout_width="50dp"
+        android:src="@mipmap/ic_launcher"
+        app:roundAsCircle="true"
+        android:layout_height="50dp"/>
+
+    <TextView
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:layout_marginTop="5dp"
+        android:textSize="15sp"
+        android:id="@+id/song"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@id/album_imageview"
+        android:text="@string/song_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:textSize="12sp"
+        android:textColor="#717171"
+        android:id="@+id/song_author"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@id/album_imageview"
+        android:text="@string/song_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/more"
+        app:srcCompat="@drawable/ic_more_vert_grey_500_36dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>
