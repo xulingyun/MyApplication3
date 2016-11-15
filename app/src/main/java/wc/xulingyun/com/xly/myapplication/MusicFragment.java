@@ -20,8 +20,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationView;
-
 import java.util.ArrayList;
 import java.util.List;
 
