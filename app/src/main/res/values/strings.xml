@@ -34,5 +34,7 @@
     </string>
 
     <string name="song">歌曲</string>
+    <string name="load_more_normal">加载更多</string>
+    <string name="load_more_loading">正在加载……</string>
 
 </resources>

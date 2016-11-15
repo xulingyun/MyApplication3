@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import wc.xulingyun.com.xly.myapplication.R;
@@ -27,6 +28,14 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     private OnItemListener mOnItemListener;
     Context mContext;
     List<SongListEntity> mSongListEntities;
+
+
+    public void addData(List<SongListEntity> $SongListEntities){
+        if(mSongListEntities==null){
+            mSongListEntities = new ArrayList<>();
+        }
+        mSongListEntities.addAll($SongListEntities);
+    }
 
     public void setOnMoreListener(OnMoreListener $OnMoreListener) {
         mOnMoreListener = $OnMoreListener;
@@ -50,11 +59,11 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     @Override
     public void onBindViewHolder(ImageViewHolder holder, int position) {
-        SongListEntity lSongListEntity =  mSongListEntities.get(position);
+        SongListEntity lSongListEntity = mSongListEntities.get(position);
         Uri uri = Uri.parse(lSongListEntity.getPic_small());
         holder.mImageView.setImageURI(uri);
         holder.title.setText(lSongListEntity.getTitle());
-        holder.author.setText(lSongListEntity.getAuthor()+"·"+lSongListEntity.getAlbum_title());
+        holder.author.setText(lSongListEntity.getAuthor() + "·" + lSongListEntity.getAlbum_title());
         holder.mAppCompatImageView.setOnClickListener(this);
     }
 
@@ -72,6 +81,11 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         }
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
+
     class ImageViewHolder extends RecyclerView.ViewHolder {
 
         SimpleDraweeView mImageView;
@@ -80,10 +94,11 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         AppCompatImageView mAppCompatImageView;
         public ImageViewHolder(View itemView) {
             super(itemView);
-            this.mImageView = (SimpleDraweeView) itemView.findViewById(R.id.album_imageview);
-            this.title = (TextView) itemView.findViewById(R.id.song);
-            this.author = (TextView) itemView.findViewById(R.id.song_author);
-            this.mAppCompatImageView = (AppCompatImageView) itemView.findViewById(R.id.more);
+            mImageView = (SimpleDraweeView) itemView.findViewById(R.id.album_imageview);
+            title = (TextView) itemView.findViewById(R.id.song);
+            author = (TextView) itemView.findViewById(R.id.song_author);
+            mAppCompatImageView = (AppCompatImageView) itemView.findViewById(R.id.more);
         }
     }
+
 }

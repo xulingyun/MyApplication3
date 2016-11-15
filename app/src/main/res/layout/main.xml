@@ -1,19 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
     <FrameLayout
         android:id="@+id/fl_body"
         android:layout_width="match_parent"
-        android:layout_above="@+id/tab_layout"
         android:layout_height="match_parent"/>
 
-    <com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationView
+    <!--<com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationView-->
+        <!--android:id="@+id/bottomNavigation"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true" />-->
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:background="@color/gray"
+        android:orientation="horizontal"
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_alignParentBottom="true" />
+        android:layout_height="50dp">
+        <TextView
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:text="@string/song_collect"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:text="@string/song_collect"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:text="@string/song_collect"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:text="@string/song_collect"
+            android:layout_height="wrap_content"/>
+        </LinearLayout>
 
 </RelativeLayout>

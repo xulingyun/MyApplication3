@@ -35,6 +35,13 @@ public class MainActivity extends AppCompatActivity
     private int height;
     private int width;
 
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +55,15 @@ public class MainActivity extends AppCompatActivity
         lFragmentTransaction.commit();
 
 
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigation);
-
-        BottomNavigationItem bottomNavigationItem = new BottomNavigationItem
-                ("Record", ContextCompat.getColor(this, R.color.red), R.drawable.ic_person_pin_blue_a100_36dp);
-        BottomNavigationItem bottomNavigationItem1 = new BottomNavigationItem
-                ("Like", ContextCompat.getColor(this, R.color.withoutColoredBackground), R.drawable.ic_chat_blue_a100_36dp);
-        bottomNavigationView.addTab(bottomNavigationItem);
-        bottomNavigationView.addTab(bottomNavigationItem1);
+//        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigation);
+//
+//        BottomNavigationItem bottomNavigationItem = new BottomNavigationItem
+//                ("Record", ContextCompat.getColor(this, R.color.red), R.drawable.ic_person_pin_blue_a100_36dp);
+//        BottomNavigationItem bottomNavigationItem1 = new BottomNavigationItem
+//                ("Like", ContextCompat.getColor(this, R.color.withoutColoredBackground), R.drawable.ic_chat_blue_a100_36dp);
+//        bottomNavigationView.addTab(bottomNavigationItem);
+//        bottomNavigationView.addTab(bottomNavigationItem1);
+        System.out.println("dddddd");
     }
 
     public void createPopupWindow(){
