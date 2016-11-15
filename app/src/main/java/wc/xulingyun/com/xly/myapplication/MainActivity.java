@@ -1,5 +1,10 @@
 package wc.xulingyun.com.xly.myapplication;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,6 +25,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationItem;
@@ -27,13 +34,19 @@ import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
+import static wc.xulingyun.com.xly.myapplication.R.id.imageView;
 import static wc.xulingyun.com.xly.myapplication.R.id.toolbar;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener ,OnShowOrHideListener{
 
     private int height;
     private int width;
+    boolean isStartAnim;
+    boolean isHideAnim;
+    private int bottomHeight;
+
+    LinearLayout lBottomNavigationView;
 
     public int getHeight() {
         return height;
@@ -53,6 +66,10 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction lFragmentTransaction = fm.beginTransaction();
         lFragmentTransaction.add(R.id.fl_body,new TotalMusicFragment(),"TotalMusicFragment");
         lFragmentTransaction.commit();
+
+        lBottomNavigationView = (LinearLayout) findViewById(R.id.bottomNavigation);
+        getBottomHeight();
+
 
 
 //        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigation);
@@ -84,6 +101,16 @@ public class MainActivity extends AppCompatActivity
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         height = dm.heightPixels;
         width = dm.widthPixels;
+    }
+
+    private void getBottomHeight(){
+        int w = View.MeasureSpec.makeMeasureSpec(0,
+                View.MeasureSpec.UNSPECIFIED);
+        int h = View.MeasureSpec.makeMeasureSpec(0,
+                View.MeasureSpec.UNSPECIFIED);
+        lBottomNavigationView.measure(w, h);
+        bottomHeight = lBottomNavigationView.getMeasuredHeight();
+//        int width = lBottomNavigationView.getMeasuredWidth();
     }
 
     @Override
@@ -141,6 +168,82 @@ public class MainActivity extends AppCompatActivity
 //        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 //        drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void showBottomMenu() {
+        if(isStartAnim||!isHideAnim) return;
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(0,bottomHeight);
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(lBottomNavigationView, "alpha", 0, 1);
+
+        final ViewGroup.LayoutParams layoutParams = lBottomNavigationView.getLayoutParams();
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                layoutParams.height= (int) valueAnimator.getAnimatedValue();
+                System.out.println("layoutParams.height:"+layoutParams.height);
+                lBottomNavigationView.setLayoutParams(layoutParams);
+            }
+        });
+        valueAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                isStartAnim = true;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                isStartAnim = false;
+                isHideAnim = false;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        AnimatorSet animatorSet=new AnimatorSet();
+        animatorSet.setDuration(500);
+        animatorSet.playTogether(valueAnimator,alpha);
+        animatorSet.start();
+    }
+
+    @Override
+    public void hideBottomMenu(){
+        if(isStartAnim||isHideAnim) return;
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(bottomHeight,0);
+        System.out.println("height11:"+height);
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(lBottomNavigationView, "alpha", 1, 0);
+        final ViewGroup.LayoutParams layoutParams = lBottomNavigationView.getLayoutParams();
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                layoutParams.height= (int) valueAnimator.getAnimatedValue();
+                System.out.println("layoutParams.height11:"+layoutParams.height);
+                lBottomNavigationView.setLayoutParams(layoutParams);
+            }
+        });
+        valueAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                isStartAnim = true;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                isStartAnim = false;
+                isHideAnim = true;
+            }
+        });
+        AnimatorSet animatorSet=new AnimatorSet();
+        animatorSet.setDuration(500);
+        animatorSet.playTogether(valueAnimator,alpha);
+        animatorSet.start();
     }
 
 }

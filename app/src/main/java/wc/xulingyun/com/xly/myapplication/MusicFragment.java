@@ -1,10 +1,5 @@
 package wc.xulingyun.com.xly.myapplication;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,7 +12,6 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -47,7 +41,7 @@ import static wc.xulingyun.com.xly.myapplication.R.id.image_recycler;
  * 描述：
  */
 
-public class MusicFragment extends Fragment {
+public class MusicFragment extends Fragment{
 
     RecyclerView musice_recycler;
     List<SongListEntity> mSongListEntities;
@@ -56,97 +50,17 @@ public class MusicFragment extends Fragment {
     SwipeRefreshLayout mSwipeRefreshLayout;
     int offValue = 0;
     int loadCount;
-    int size = 10;
+    int size = 20;
     private LAYOUT_MANAGER_TYPE layoutManagerType;
     private int lastVisibleItemPosition;
     private int[] lastPositions;
     private static final int off_y = 1;
-    LinearLayout lBottomNavigationView;
     MainActivity mMainActivity;
-    int height;
-//    ViewGroup.LayoutParams layoutParams;
-    boolean isStartAnim;
-    boolean isHideAnim;
 
     public enum LAYOUT_MANAGER_TYPE {
         LINEAR,
         GRID,
         STAGGERED_GRID
-    }
-
-    private void showMenuBar(){
-        height = lBottomNavigationView.getHeight();
-        if(isStartAnim||!isHideAnim) return;
-        ValueAnimator valueAnimator = ValueAnimator.ofInt(0,height);
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(lBottomNavigationView, "alpha", 0, 1);
-
-        final ViewGroup.LayoutParams layoutParams = lBottomNavigationView.getLayoutParams();
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                layoutParams.height= (int) valueAnimator.getAnimatedValue();
-                System.out.println("layoutParams.height:"+layoutParams.height);
-                lBottomNavigationView.setLayoutParams(layoutParams);
-            }
-        });
-        valueAnimator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                isStartAnim = true;
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                isStartAnim = false;
-                isHideAnim = true;
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-        AnimatorSet animatorSet=new AnimatorSet();
-        animatorSet.setDuration(5000);
-        animatorSet.playTogether(valueAnimator,alpha);
-        animatorSet.start();
-    }
-
-    private void hideMenuBar(){
-        if(isStartAnim||isHideAnim) return;
-        ValueAnimator valueAnimator = ValueAnimator.ofInt(height,0);
-        System.out.println("height11:"+height);
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(lBottomNavigationView, "alpha", 1, 0);
-        final ViewGroup.LayoutParams layoutParams = lBottomNavigationView.getLayoutParams();
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                layoutParams.height= (int) valueAnimator.getAnimatedValue();
-                System.out.println("layoutParams.height11:"+layoutParams.height);
-                lBottomNavigationView.setLayoutParams(layoutParams);
-            }
-        });
-        valueAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                isStartAnim = true;
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                isStartAnim = false;
-                isHideAnim = false;
-            }
-        });
-        AnimatorSet animatorSet=new AnimatorSet();
-        animatorSet.setDuration(5000);
-        animatorSet.playTogether(valueAnimator,alpha);
-        animatorSet.start();
     }
 
 
@@ -155,14 +69,10 @@ public class MusicFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.music_fragment,container,false);
         isFirst = true;
-        isStartAnim = false;
-        isHideAnim = false;
         mSongListEntities = new ArrayList<>();
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.red,R.color.colorPrimary,R.color.default_indexBar_selectedTextColor,R.color.colorPrimaryDark);
         mMainActivity = (MainActivity) getActivity();
-        lBottomNavigationView = (LinearLayout) mMainActivity.findViewById(R.id.bottomNavigation);
-        height = lBottomNavigationView.getHeight();
         musice_recycler = (RecyclerView)view.findViewById(image_recycler);
         musice_recycler.setLayoutManager(new LinearLayoutManager(getContext()));
         musice_recycler.setItemAnimator(new DefaultItemAnimator());
@@ -172,9 +82,9 @@ public class MusicFragment extends Fragment {
                 super.onScrolled(recyclerView, dx, dy);
                 if(off_y<Math.abs(dy)){
                     if(dy>0){
-                        hideMenuBar();
+                        ((MainActivity)getActivity()).hideBottomMenu();
                     }else if(dy<0){
-                        showMenuBar();
+                        ((MainActivity)getActivity()).showBottomMenu();
                     }
                 }
 
@@ -242,8 +152,6 @@ public class MusicFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        height = lBottomNavigationView.getHeight();
-        System.out.println("height------"+height);
     }
 
     void initData(int type, int size, int offset){

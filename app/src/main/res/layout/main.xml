@@ -15,15 +15,16 @@
         <!--android:layout_alignParentBottom="true" />-->
 
     <LinearLayout
+        android:gravity="center"
         android:layout_alignParentBottom="true"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:background="@color/gray"
+        android:background="@color/red"
         android:orientation="horizontal"
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="50dp">
         <TextView
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:layout_weight="1"
             android:textSize="20sp"
             android:gravity="center"
@@ -32,6 +33,8 @@
             android:layout_height="wrap_content"/>
 
         <TextView
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:layout_weight="1"
             android:textSize="20sp"
             android:gravity="center"
@@ -40,6 +43,8 @@
             android:layout_height="wrap_content"/>
 
         <TextView
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:layout_weight="1"
             android:textSize="20sp"
             android:gravity="center"
@@ -48,6 +53,8 @@
             android:layout_height="wrap_content"/>
 
         <TextView
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:layout_weight="1"
             android:textSize="20sp"
             android:gravity="center"
