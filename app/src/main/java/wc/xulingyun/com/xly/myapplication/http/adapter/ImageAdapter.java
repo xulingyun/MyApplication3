@@ -37,6 +37,16 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         mSongListEntities.addAll($SongListEntities);
     }
 
+    public void refreshData(List<SongListEntity> $SongListEntities){
+        if(mSongListEntities==null){
+            mSongListEntities = new ArrayList<>();
+            mSongListEntities.addAll($SongListEntities);
+        }else{
+            mSongListEntities.clear();
+            mSongListEntities.addAll($SongListEntities);
+        }
+    }
+
     public void setOnMoreListener(OnMoreListener $OnMoreListener) {
         mOnMoreListener = $OnMoreListener;
     }

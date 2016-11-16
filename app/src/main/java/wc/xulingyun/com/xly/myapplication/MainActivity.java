@@ -80,7 +80,6 @@ public class MainActivity extends AppCompatActivity
 //                ("Like", ContextCompat.getColor(this, R.color.withoutColoredBackground), R.drawable.ic_chat_blue_a100_36dp);
 //        bottomNavigationView.addTab(bottomNavigationItem);
 //        bottomNavigationView.addTab(bottomNavigationItem1);
-        System.out.println("dddddd");
     }
 
     public void createPopupWindow(){

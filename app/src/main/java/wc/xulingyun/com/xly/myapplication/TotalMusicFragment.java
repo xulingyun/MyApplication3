@@ -41,7 +41,8 @@ public class TotalMusicFragment extends Fragment {
         toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.song);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        Fragment lFragment1 = new MusicFragment();
+        MusicFragment lFragment1 = new MusicFragment();
+        lFragment1.setAutoRefresh(true);
         Fragment lFragment2 = new PhotoFragment();
         mFragmentArrayList = new ArrayList<>();
         mFragmentArrayList.add(lFragment1);
