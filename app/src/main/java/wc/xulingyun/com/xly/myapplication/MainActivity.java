@@ -7,19 +7,12 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,13 +22,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
-import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationItem;
-import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationView;
-
-import java.util.ArrayList;
-
-import static wc.xulingyun.com.xly.myapplication.R.id.imageView;
-import static wc.xulingyun.com.xly.myapplication.R.id.toolbar;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener ,OnShowOrHideListener{
@@ -45,8 +34,8 @@ public class MainActivity extends AppCompatActivity
     boolean isStartAnim;
     boolean isHideAnim;
     private int bottomHeight;
-
-    LinearLayout lBottomNavigationView;
+    Unbinder mUnBinder;
+    @BindView(R.id.bottomNavigation)LinearLayout lBottomNavigationView;
 
     public int getHeight() {
         return height;
@@ -60,6 +49,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        mUnBinder = ButterKnife.bind(this);
         getWidthAndHeight();
 
         FragmentManager fm = getSupportFragmentManager();
@@ -67,13 +57,9 @@ public class MainActivity extends AppCompatActivity
         lFragmentTransaction.add(R.id.fl_body,new TotalMusicFragment(),"TotalMusicFragment");
         lFragmentTransaction.commit();
 
-        lBottomNavigationView = (LinearLayout) findViewById(R.id.bottomNavigation);
         getBottomHeight();
 
-
-
 //        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigation);
-//
 //        BottomNavigationItem bottomNavigationItem = new BottomNavigationItem
 //                ("Record", ContextCompat.getColor(this, R.color.red), R.drawable.ic_person_pin_blue_a100_36dp);
 //        BottomNavigationItem bottomNavigationItem1 = new BottomNavigationItem
@@ -167,6 +153,12 @@ public class MainActivity extends AppCompatActivity
 //        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 //        drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mUnBinder.unbind();
     }
 
     @Override

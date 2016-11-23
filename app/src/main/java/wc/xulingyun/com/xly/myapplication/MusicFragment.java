@@ -1,5 +1,6 @@
 package wc.xulingyun.com.xly.myapplication;
 
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -7,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,12 +44,38 @@ public class MusicFragment extends BaseFragment{
     int loadCount = 0;
     int size = 20;
     MainActivity mMainActivity;
+    int kind;
+
+    public static MusicFragment newInstance(String text) {
+        MusicFragment fragment = new MusicFragment();
+        Bundle args = new Bundle();
+        args.putString("kind", text);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     void init() {
         isFirst = true;
         mSongListEntities = new ArrayList<>();
         mMainActivity = (MainActivity) getActivity();
+    }
+
+    @Override
+    protected void readCacheData() {
+
+    }
+
+    @Override
+    protected void writeCacheData() {
+
+    }
+
+    @Override
+    protected void getArgs() {
+        if (getArguments() != null) {
+            kind = Integer.parseInt(getArguments().getString("kind"));
+        }
     }
 
     @Override
@@ -71,7 +98,7 @@ public class MusicFragment extends BaseFragment{
         mSwipeRefreshLayout.setRefreshing(true);
         loadCount=0;
         offValue= loadCount*size;
-        loadData(1,size,offValue,true);
+        loadData(kind,size,offValue,true);
     }
 
     @Override
@@ -79,7 +106,7 @@ public class MusicFragment extends BaseFragment{
         mSwipeRefreshLayout.setRefreshing(true);
         loadCount++;
         offValue= loadCount*size;
-        loadData(1,size,offValue,false);
+        loadData(kind,size,offValue,false);
     }
 
     void loadData(int type, int size, int offset, final boolean isRefresh){
@@ -122,7 +149,7 @@ public class MusicFragment extends BaseFragment{
                                 adapter.notifyDataSetChanged();
                             }
                         }else{
-                            Toast.makeText(mMainActivity, "已经没有歌曲了！", Toast.LENGTH_SHORT).show();
+                            adapter.setFooterTextView("已经没有歌曲了！");
                         }
                         mSwipeRefreshLayout.setRefreshing(false);
                         return Observable.from($Music.getSong_list());

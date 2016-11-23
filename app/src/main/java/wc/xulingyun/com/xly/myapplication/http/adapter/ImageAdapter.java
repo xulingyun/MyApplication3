@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -17,17 +18,25 @@ import java.util.List;
 import wc.xulingyun.com.xly.myapplication.R;
 import wc.xulingyun.com.xly.myapplication.http.dao.SongListEntity;
 
+import static android.R.attr.author;
+
 /**
  * Created by 徐玲郓 on 2016/10/24.
  * 描述：
  */
 
-public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> implements View.OnClickListener{
+public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener{
 
     private OnMoreListener mOnMoreListener;
     private OnItemListener mOnItemListener;
-    Context mContext;
-    List<SongListEntity> mSongListEntities;
+    private Context mContext;
+    private List<SongListEntity> mSongListEntities;
+    private FooterViewHolder mFooterViewHolder;
+
+    public void setFooterTextView(String text){
+        mFooterViewHolder.tv.setText(text);
+        mFooterViewHolder.mProgressBar.setVisibility(View.INVISIBLE);
+    }
 
 
     public void addData(List<SongListEntity> $SongListEntities){
@@ -61,25 +70,37 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     }
 
     @Override
-    public ImageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.image_item,parent,false);
-        v.setOnClickListener(this);
-        return new ImageViewHolder(v);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if(viewType==0){
+            View v = LayoutInflater.from(mContext).inflate(R.layout.image_item,parent,false);
+            v.setOnClickListener(this);
+            return new MusicViewHolder(v);
+        }else{
+            View v = LayoutInflater.from(mContext).inflate(R.layout.footer_layout,parent,false);
+            v.setOnClickListener(this);
+            return new FooterViewHolder(v);
+        }
     }
 
     @Override
-    public void onBindViewHolder(ImageViewHolder holder, int position) {
-        SongListEntity lSongListEntity = mSongListEntities.get(position);
-        Uri uri = Uri.parse(lSongListEntity.getPic_small());
-        holder.mImageView.setImageURI(uri);
-        holder.title.setText(lSongListEntity.getTitle());
-        holder.author.setText(lSongListEntity.getAuthor() + "·" + lSongListEntity.getAlbum_title());
-        holder.mAppCompatImageView.setOnClickListener(this);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if(holder instanceof MusicViewHolder){
+            SongListEntity lSongListEntity = mSongListEntities.get(position);
+            Uri uri = Uri.parse(lSongListEntity.getPic_small());
+            ((MusicViewHolder)holder).mImageView.setImageURI(uri);
+            ((MusicViewHolder)holder).title.setText(lSongListEntity.getTitle());
+            ((MusicViewHolder)holder).author.setText(lSongListEntity.getAuthor() + "·" + lSongListEntity.getAlbum_title());
+            ((MusicViewHolder)holder).mAppCompatImageView.setOnClickListener(this);
+        }else if(holder instanceof FooterViewHolder){
+            mFooterViewHolder = ((FooterViewHolder)holder);
+            mFooterViewHolder.tv.setText(R.string.load_more_loading);
+            mFooterViewHolder.mProgressBar.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return mSongListEntities.size();
+        return mSongListEntities.size()+1;
     }
 
     @Override
@@ -93,16 +114,20 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     @Override
     public int getItemViewType(int position) {
-        return super.getItemViewType(position);
+        if(position<getItemCount()-1){
+            return 0;
+        }else{
+            return 1;
+        }
     }
 
-    class ImageViewHolder extends RecyclerView.ViewHolder {
+    class MusicViewHolder extends RecyclerView.ViewHolder {
 
         SimpleDraweeView mImageView;
         TextView title;
         TextView author;
         AppCompatImageView mAppCompatImageView;
-        public ImageViewHolder(View itemView) {
+        public MusicViewHolder(View itemView) {
             super(itemView);
             mImageView = (SimpleDraweeView) itemView.findViewById(R.id.album_imageview);
             title = (TextView) itemView.findViewById(R.id.song);
@@ -110,5 +135,17 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             mAppCompatImageView = (AppCompatImageView) itemView.findViewById(R.id.more);
         }
     }
+
+    class FooterViewHolder extends RecyclerView.ViewHolder {
+        TextView tv;
+        ProgressBar mProgressBar;
+        public FooterViewHolder(View itemView) {
+            super(itemView);
+            tv = (TextView) itemView.findViewById(R.id.tv);
+            mProgressBar = (ProgressBar) itemView.findViewById(R.id.progress_bar);
+        }
+    }
+
+
 
 }

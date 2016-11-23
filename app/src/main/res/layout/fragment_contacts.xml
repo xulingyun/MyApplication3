@@ -1,0 +1,18 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:layout_height="match_parent"
+             tools:context="wc.xulingyun.com.xly.myapplication.ContactsFragment">
+
+    <me.yokeyword.indexablerv.IndexableLayout
+        android:id="@+id/indexable_layout"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        app:indexBar_layout_width="24dp"
+        app:indexBar_background="#08000000"
+        app:indexBar_textColor="#000000"
+        app:indexBar_selectedTextColor="#f33737"
+        app:indexBar_textSize="14sp"
+        app:indexBar_textSpace="6dp" />
+</FrameLayout>

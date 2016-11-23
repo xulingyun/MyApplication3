@@ -11,6 +11,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import static wc.xulingyun.com.xly.myapplication.BaseFragment.LAYOUT_MANAGER_TYPE.STAGGERED_GRID;
 
@@ -21,19 +22,25 @@ import static wc.xulingyun.com.xly.myapplication.BaseFragment.LAYOUT_MANAGER_TYP
 
 public abstract class BaseFragment extends Fragment {
 
+
     View view;
     RecyclerView mRecyclerView;
     private static final int off_y = 2;
     private LAYOUT_MANAGER_TYPE layoutManagerType;
     private int lastVisibleItemPosition;
     private int[] lastPositions;
-    private boolean isFirst;
     private boolean isAutoRefresh = true;
     SwipeRefreshLayout mSwipeRefreshLayout;
 
+
+
+
     public void setAutoRefresh(boolean $AutoRefresh) {
         isAutoRefresh = $AutoRefresh;
-        loadLastData();
+    }
+
+    public boolean isAutoRefresh() {
+        return isAutoRefresh;
     }
 
     public enum LAYOUT_MANAGER_TYPE {
@@ -47,13 +54,29 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            String kind = getArguments().getString("kind");
+        }
+        getArgs();
         getViewByLayout(inflater,container);
         setView();
         init();
         setRecyclerScrollListener();
         setSwipeRefreshLayoutListener();
+        if(isAutoRefresh()){
+            if(NetUtil.isNetworkAvailable(getActivity())){
+                loadLastData();
+            }else{
+                readCacheData();
+            }
+        }
         return view;
     }
+
+    protected abstract void readCacheData();
+    protected abstract void writeCacheData();
+
+    protected abstract void getArgs();
 
     private void setSwipeRefreshLayoutListener() {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
