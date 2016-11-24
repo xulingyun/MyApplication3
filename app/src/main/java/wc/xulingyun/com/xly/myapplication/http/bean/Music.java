@@ -1,4 +1,4 @@
-package wc.xulingyun.com.xly.myapplication.http.dao;
+package wc.xulingyun.com.xly.myapplication.http.bean;
 
 import com.google.gson.Gson;
 
@@ -7,12 +7,13 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+
 /**
  * Created by 徐玲郓 on 2016/10/19.
  * 描述：
  */
 
-public class Music {
+public class Music extends TextBean{
 
     /**
      * billboard_type : 1

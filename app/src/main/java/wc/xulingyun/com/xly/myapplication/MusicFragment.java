@@ -6,29 +6,16 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
-import wc.xulingyun.com.xly.myapplication.http.RequestServes;
 import wc.xulingyun.com.xly.myapplication.http.adapter.ImageAdapter;
-import wc.xulingyun.com.xly.myapplication.http.adapter.OnItemListener;
-import wc.xulingyun.com.xly.myapplication.http.adapter.OnMoreListener;
 import wc.xulingyun.com.xly.myapplication.http.adapter.RecycleViewDivider;
-import wc.xulingyun.com.xly.myapplication.http.dao.Music;
-import wc.xulingyun.com.xly.myapplication.http.dao.SongListEntity;
+import wc.xulingyun.com.xly.myapplication.http.bean.Music;
+import wc.xulingyun.com.xly.myapplication.http.bean.SongListEntity;
+import wc.xulingyun.com.xly.myapplication.http.util.LoadDataUtil;
 
 /**
  * Created by 徐玲郓 on 2016/11/1.
@@ -98,7 +85,7 @@ public class MusicFragment extends BaseFragment{
         mSwipeRefreshLayout.setRefreshing(true);
         loadCount=0;
         offValue= loadCount*size;
-        loadData(kind,size,offValue,true);
+        loadData("baidu.ting.billboard.billList",kind,size,offValue,true);
     }
 
     @Override
@@ -106,73 +93,74 @@ public class MusicFragment extends BaseFragment{
         mSwipeRefreshLayout.setRefreshing(true);
         loadCount++;
         offValue= loadCount*size;
-        loadData(kind,size,offValue,false);
+        loadData("baidu.ting.billboard.billList",kind,size,offValue,false);
     }
 
-    void loadData(int type, int size, int offset, final boolean isRefresh){
-        Retrofit mRetrofit = new Retrofit.Builder()
-                .baseUrl("http://tingapi.ting.baidu.com/")
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-        RequestServes mRequestServes = mRetrofit.create(RequestServes.class);
-        mRequestServes.getString("baidu.ting.billboard.billList",type,size,offset)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Func1<Music, Observable<SongListEntity>>() {
-                    @Override
-                    public Observable<SongListEntity> call(Music $Music) {
-                        if($Music.getSong_list()!=null) {
-                            if (isFirst) {
-                                isFirst = false;
-                                adapter = new ImageAdapter(getContext(), $Music.getSong_list());
-                                mRecyclerView.setAdapter(adapter);
-                                adapter.setOnMoreListener(new OnMoreListener() {
-                                    @Override
-                                    public void onClick(View $View) {
-                                        (mMainActivity).createPopupWindow();
-                                    }
-                                });
-                                adapter.setOnItemListener(new OnItemListener() {
-                                    @Override
-                                    public void onClick(View $View) {
+    public void hehe(Music $Music){
+        adapter = new ImageAdapter(getContext(), $Music.getSong_list());
+        mRecyclerView.setAdapter(adapter);
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
 
-                                    }
-                                });
-                            } else {
-                                if(!isRefresh) {
-                                    adapter.addData($Music.getSong_list());
-                                }else{
-                                    adapter.refreshData($Music.getSong_list());
-                                }
-                                adapter.notifyDataSetChanged();
-                            }
-                        }else{
-                            adapter.setFooterTextView("已经没有歌曲了！");
-                        }
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        return Observable.from($Music.getSong_list());
-                    }
-                })
-                .subscribe(new Subscriber<SongListEntity>() {
-                    @Override
-                    public void onCompleted() {
+    public void heihei(Music $Music){
+        adapter.addData($Music.getSong_list());
+        adapter.notifyDataSetChanged();
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(SongListEntity $SongListEntity) {
-
-                    }
-                });
+    public void xixi(){
+        adapter.setFooterTextView("已经没有歌曲了！");
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
 
+    void loadData(String methed, int type, int size, int offset, boolean isRefresh){
+        LoadDataUtil.loadDataUseCache(methed,type,size,offset,this,isRefresh);
+//        Retrofit mRetrofit = new Retrofit.Builder()
+//                .baseUrl("http://tingapi.ting.baidu.com/")
+//                .addConverterFactory(ScalarsConverterFactory.create())
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+//                .build();
+//        RequestServes mRequestServes = mRetrofit.create(RequestServes.class);
+//        mRequestServes.getString("baidu.ting.billboard.billList",type,size,offset)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .flatMap(new Func1<Music, Observable<SongListEntity>>() {
+//                    @Override
+//                    public Observable<SongListEntity> call(Music $Music) {
+//                        if($Music.getSong_list()!=null) {
+//                            if (isFirst) {
+//                                isFirst = false;
+//                                adapter = new ImageAdapter(getContext(), $Music.getSong_list());
+//                                mRecyclerView.setAdapter(adapter);
+//                                adapter.setOnMoreListener(new OnMoreListener() {
+//                                    @Override
+//                                    public void onClick(View $View) {
+//                                        (mMainActivity).createPopupWindow();
+//                                    }
+//                                });
+//                                adapter.setOnItemListener(new OnItemListener() {
+//                                    @Override
+//                                    public void onClick(View $View) {
+//
+//                                    }
+//                                });
+//                            } else {
+//                                if(!isRefresh) {
+//                                    adapter.addData($Music.getSong_list());
+//                                }else{
+//                                    adapter.refreshData($Music.getSong_list());
+//                                }
+//                                adapter.notifyDataSetChanged();
+//                            }
+//                        }else{
+//                            adapter.setFooterTextView("已经没有歌曲了！");
+//                        }
+//                        mSwipeRefreshLayout.setRefreshing(false);
+//                        return Observable.from($Music.getSong_list());
+//                    }
+//                });
+    }
 
 }

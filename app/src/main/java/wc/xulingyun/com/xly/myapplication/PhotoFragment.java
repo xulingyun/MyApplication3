@@ -10,20 +10,15 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 import wc.xulingyun.com.xly.myapplication.http.adapter.LocalMusicAdapter;
 import wc.xulingyun.com.xly.myapplication.http.adapter.RecycleViewDivider;
-import wc.xulingyun.com.xly.myapplication.http.dao.LocalMusic;
+import wc.xulingyun.com.xly.myapplication.http.bean.LocalMusic;
 
 /**
  * Created by 徐玲郓 on 2016/11/1.

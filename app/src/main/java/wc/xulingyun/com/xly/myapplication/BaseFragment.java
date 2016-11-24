@@ -11,7 +11,6 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import static wc.xulingyun.com.xly.myapplication.BaseFragment.LAYOUT_MANAGER_TYPE.STAGGERED_GRID;
 
@@ -54,9 +53,6 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            String kind = getArguments().getString("kind");
-        }
         getArgs();
         getViewByLayout(inflater,container);
         setView();
@@ -64,11 +60,7 @@ public abstract class BaseFragment extends Fragment {
         setRecyclerScrollListener();
         setSwipeRefreshLayoutListener();
         if(isAutoRefresh()){
-            if(NetUtil.isNetworkAvailable(getActivity())){
-                loadLastData();
-            }else{
-                readCacheData();
-            }
+            loadLastData();
         }
         return view;
     }

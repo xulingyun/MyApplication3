@@ -16,9 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wc.xulingyun.com.xly.myapplication.R;
-import wc.xulingyun.com.xly.myapplication.http.dao.SongListEntity;
-
-import static android.R.attr.author;
+import wc.xulingyun.com.xly.myapplication.http.bean.SongListEntity;
 
 /**
  * Created by 徐玲郓 on 2016/10/24.

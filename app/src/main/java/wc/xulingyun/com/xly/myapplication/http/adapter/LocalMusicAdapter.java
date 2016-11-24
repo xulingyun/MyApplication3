@@ -1,7 +1,6 @@
 package wc.xulingyun.com.xly.myapplication.http.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,13 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
-
 import java.util.List;
 
 import wc.xulingyun.com.xly.myapplication.R;
-import wc.xulingyun.com.xly.myapplication.http.dao.LocalMusic;
-import wc.xulingyun.com.xly.myapplication.http.dao.SongListEntity;
+import wc.xulingyun.com.xly.myapplication.http.bean.LocalMusic;
 
 /**
  * Created by 徐玲郓 on 2016/10/24.

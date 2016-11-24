@@ -1,4 +1,4 @@
-package wc.xulingyun.com.xly.myapplication.http.dao;
+package wc.xulingyun.com.xly.myapplication.http.bean;
 
 import com.google.gson.Gson;
 
@@ -102,12 +102,12 @@ public class SongListEntity {
     private String mv_provider;
     private String artist_name;
 
-    public static wc.xulingyun.com.xly.myapplication.http.dao.SongListEntity objectFromData(String str, String key) {
+    public static SongListEntity objectFromData(String str, String key) {
 
         try {
             JSONObject jsonObject = new JSONObject(str);
 
-            return new Gson().fromJson(jsonObject.getString(str), wc.xulingyun.com.xly.myapplication.http.dao.SongListEntity.class);
+            return new Gson().fromJson(jsonObject.getString(str), SongListEntity.class);
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -1,4 +1,4 @@
-package wc.xulingyun.com.xly.myapplication.http.dao;
+package wc.xulingyun.com.xly.myapplication.http.bean;
 
 /**
  * Created by 徐玲郓 on 2016/11/2.

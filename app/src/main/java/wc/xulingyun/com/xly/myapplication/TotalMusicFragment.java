@@ -19,8 +19,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by 徐玲郓 on 2016/11/1.
