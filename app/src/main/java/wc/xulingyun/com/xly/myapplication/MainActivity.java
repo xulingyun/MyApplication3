@@ -8,19 +8,18 @@ import android.animation.ValueAnimator;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+
+import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationView;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,7 +34,11 @@ public class MainActivity extends AppCompatActivity
     boolean isHideAnim;
     private int bottomHeight;
     Unbinder mUnBinder;
-    @BindView(R.id.bottomNavigation)LinearLayout lBottomNavigationView;
+    @BindView(R.id.bottomNavigation)
+    BottomNavigationView lBottomNavigationView;
+    @BindView(R.id.main_view_pager)
+    NOScollViewPager mainViewPage;
+    ArrayList<Fragment> mFragmentArrayList;
 
     public int getHeight() {
         return height;
@@ -52,20 +55,26 @@ public class MainActivity extends AppCompatActivity
         mUnBinder = ButterKnife.bind(this);
         getWidthAndHeight();
 
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction lFragmentTransaction = fm.beginTransaction();
-        lFragmentTransaction.add(R.id.fl_body,new TotalMusicFragment(),"TotalMusicFragment");
-        lFragmentTransaction.commit();
-
         getBottomHeight();
 
-//        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigation);
-//        BottomNavigationItem bottomNavigationItem = new BottomNavigationItem
-//                ("Record", ContextCompat.getColor(this, R.color.red), R.drawable.ic_person_pin_blue_a100_36dp);
-//        BottomNavigationItem bottomNavigationItem1 = new BottomNavigationItem
-//                ("Like", ContextCompat.getColor(this, R.color.withoutColoredBackground), R.drawable.ic_chat_blue_a100_36dp);
-//        bottomNavigationView.addTab(bottomNavigationItem);
-//        bottomNavigationView.addTab(bottomNavigationItem1);
+        TotalMusicFragment lFragment1 = new TotalMusicFragment();
+        MusicFragment lFragment3 = MusicFragment.newInstance("8");
+        MusicFragment lFragment4 = MusicFragment.newInstance("11");
+        KuaidiFragment lFragment5 = new KuaidiFragment();
+        mFragmentArrayList = new ArrayList<>();
+        mFragmentArrayList.add(lFragment1);
+        mFragmentArrayList.add(lFragment3);
+        mFragmentArrayList.add(lFragment4);
+        mFragmentArrayList.add(lFragment5);
+        mainViewPage.setAdapter(new Mypageradapter(getSupportFragmentManager(),mFragmentArrayList,new String[]{"音乐","照片","电话","快递"}));
+
+        lBottomNavigationView.setUpWithViewPager(mainViewPage,
+                new int[]{R.color.red,R.color.colorPrimary,R.color.gray,R.color.default_indexBar_textColor},
+                new int[]{R.drawable.ic_music_video_white_36dp,R.drawable.ic_photo_size_select_actual_white_36dp,
+                        R.drawable.ic_local_phone_white_36dp,R.drawable.ic_bug_report_white_36dp}
+        );
+        lBottomNavigationView.isColoredBackground(false);
+        lBottomNavigationView.setItemActiveColorWithoutColoredBackground(R.color.red);
     }
 
     public void createPopupWindow(){
@@ -100,12 +109,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+        super.onBackPressed();
     }
 
     @Override
@@ -117,12 +121,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -150,8 +149,6 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -164,19 +161,16 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void showBottomMenu() {
         if(isStartAnim||!isHideAnim) return;
-        ValueAnimator valueAnimator = ValueAnimator.ofInt(0,bottomHeight);
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(bottomHeight,0);
         ObjectAnimator alpha = ObjectAnimator.ofFloat(lBottomNavigationView, "alpha", 0, 1);
 
-        final ViewGroup.LayoutParams layoutParams = lBottomNavigationView.getLayoutParams();
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                layoutParams.height= (int) valueAnimator.getAnimatedValue();
-                System.out.println("layoutParams.height:"+layoutParams.height);
-                lBottomNavigationView.setLayoutParams(layoutParams);
+                lBottomNavigationView.setTranslationY((int)valueAnimator.getAnimatedValue());
             }
         });
-        valueAnimator.addListener(new Animator.AnimatorListener() {
+        valueAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
                 isStartAnim = true;
@@ -186,16 +180,6 @@ public class MainActivity extends AppCompatActivity
             public void onAnimationEnd(Animator animation) {
                 isStartAnim = false;
                 isHideAnim = false;
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
             }
         });
         AnimatorSet animatorSet=new AnimatorSet();
@@ -207,16 +191,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void hideBottomMenu(){
         if(isStartAnim||isHideAnim) return;
-        ValueAnimator valueAnimator = ValueAnimator.ofInt(bottomHeight,0);
-        System.out.println("height11:"+height);
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(0,bottomHeight);
         ObjectAnimator alpha = ObjectAnimator.ofFloat(lBottomNavigationView, "alpha", 1, 0);
-        final ViewGroup.LayoutParams layoutParams = lBottomNavigationView.getLayoutParams();
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                layoutParams.height= (int) valueAnimator.getAnimatedValue();
-                System.out.println("layoutParams.height11:"+layoutParams.height);
-                lBottomNavigationView.setLayoutParams(layoutParams);
+                lBottomNavigationView.setTranslationY((int)valueAnimator.getAnimatedValue());
             }
         });
         valueAnimator.addListener(new AnimatorListenerAdapter() {

@@ -43,12 +43,21 @@ public class TotalMusicFragment extends Fragment {
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         MusicFragment lFragment1 = MusicFragment.newInstance("1");
         MusicFragment lFragment3 = MusicFragment.newInstance("8");
-        Fragment lFragment2 = new PhotoFragment();
+        MusicFragment lFragment4 = MusicFragment.newInstance("11");
+        MusicFragment lFragment5 = MusicFragment.newInstance("14");
+        MusicFragment lFragment6 = MusicFragment.newInstance("20");
+        MusicFragment lFragment7 = MusicFragment.newInstance("21");
+        MusicFragment lFragment8 = MusicFragment.newInstance("22");
+//        Fragment lFragment2 = new PhotoFragment();
         mFragmentArrayList = new ArrayList<>();
         mFragmentArrayList.add(lFragment1);
-        mFragmentArrayList.add(lFragment2);
         mFragmentArrayList.add(lFragment3);
-        mViewPager.setAdapter(new Mypageradapter(getActivity().getSupportFragmentManager(),mFragmentArrayList,new String[]{"音乐","本地音乐","呵呵音乐"}));
+        mFragmentArrayList.add(lFragment4);
+        mFragmentArrayList.add(lFragment5);
+        mFragmentArrayList.add(lFragment6);
+        mFragmentArrayList.add(lFragment7);
+        mFragmentArrayList.add(lFragment8);
+        mViewPager.setAdapter(new Mypageradapter(getActivity().getSupportFragmentManager(),mFragmentArrayList,new String[]{"新歌榜","Billboard","摇滚榜","影视金曲榜","华语金曲榜","欧美金曲榜","经典老歌榜"}));
         mTabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -109,11 +118,11 @@ public class TotalMusicFragment extends Fragment {
      * 颜色加深处理
      *
      * @param RGBValues
-*            RGB的值，由alpha（透明度）、red（红）、green（绿）、blue（蓝）构成，
-*            Android中我们一般使用它的16进制，
-*            例如："#FFAABBCC",最左边到最右每两个字母就是代表alpha（透明度）、
-*            red（红）、green（绿）、blue（蓝）。每种颜色值占一个字节(8位)，值域0~255
-*            所以下面使用移位的方法可以得到每种颜色的值，然后每种颜色值减小一下，在合成RGB颜色，颜色就会看起来深一些了
+     * RGB的值，由alpha（透明度）、red（红）、green（绿）、blue（蓝）构成，
+     * Android中我们一般使用它的16进制，
+     * 例如："#FFAABBCC",最左边到最右每两个字母就是代表alpha（透明度）、
+     * red（红）、green（绿）、blue（蓝）。每种颜色值占一个字节(8位)，值域0~255
+     * 所以下面使用移位的方法可以得到每种颜色的值，然后每种颜色值减小一下，在合成RGB颜色，颜色就会看起来深一些了
      * @return
      */
     private int colorBurn(int RGBValues) {
@@ -126,7 +135,5 @@ public class TotalMusicFragment extends Fragment {
         blue = (int) Math.floor(blue * (1 - 0.1));
         return Color.rgb(red, green, blue);
     }
-
-
 
 }

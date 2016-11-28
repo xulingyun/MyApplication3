@@ -36,12 +36,12 @@ public class ContactsFragment extends Fragment {
     private List<ContactsEntity> initDatas() {
         list = new ArrayList<>();
         // 初始化数据
-        List<String> contactStrings = Arrays.asList(getResources().getStringArray(R.array.contact_array));
-        List<String> mobileStrings = Arrays.asList(getResources().getStringArray(R.array.mobile_array));
-        for (int i = 0; i < contactStrings.size(); i++) {
-            ContactsEntity contactEntity = new ContactsEntity(contactStrings.get(i), mobileStrings.get(i));
-            list.add(contactEntity);
-        }
+//        List<String> contactStrings = Arrays.asList(getResources().getStringArray(R.array.contact_array));
+//        List<String> mobileStrings = Arrays.asList(getResources().getStringArray(R.array.mobile_array));
+//        for (int i = 0; i < contactStrings.size(); i++) {
+//            ContactsEntity contactEntity = new ContactsEntity(contactStrings.get(i), mobileStrings.get(i));
+//            list.add(contactEntity);
+//        }
         return list;
     }
 

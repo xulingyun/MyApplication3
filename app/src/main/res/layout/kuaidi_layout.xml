@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    
+    <TextView
+        android:text="@string/kuaidi_company"
+        android:id="@+id/kuaidi_company"
+        android:layout_width="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="5dp"
+        android:layout_height="20dp"/>
+    <android.support.v7.widget.AppCompatSpinner
+        android:layout_toRightOf="@id/kuaidi_company"
+        android:layout_alignParentTop="true"
+        android:entries="@array/kuaidi"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:id="@+id/spinner"/>
+
+    <TextView
+        android:text="@string/kuaidi_code"
+        android:id="@+id/kuaidi_code_str"
+        android:layout_width="wrap_content"
+        android:layout_below="@id/kuaidi_company"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="5dp"
+        android:layout_height="20dp"/>
+    <android.support.v7.widget.AppCompatEditText
+        android:layout_below="@id/spinner"
+        android:layout_toRightOf="@id/kuaidi_code_str"
+        android:entries="@array/kuaidi"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:id="@+id/kuaidi_code"/>
+
+</RelativeLayout>

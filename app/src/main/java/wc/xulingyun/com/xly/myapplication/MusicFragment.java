@@ -22,7 +22,7 @@ import wc.xulingyun.com.xly.myapplication.http.util.LoadDataUtil;
  * 描述：
  */
 
-public class MusicFragment extends BaseFragment{
+public class MusicFragment extends BaseFragment implements GetDataCallback<Music>{
 
     List<SongListEntity> mSongListEntities;
     boolean isFirst = true;
@@ -96,71 +96,32 @@ public class MusicFragment extends BaseFragment{
         loadData("baidu.ting.billboard.billList",kind,size,offValue,false);
     }
 
-    public void hehe(Music $Music){
+    void loadData(String methed, int type, int size, int offset, boolean isRefresh){
+        LoadDataUtil.loadDataUseCache(methed,type,size,offset,this,isRefresh);
+    }
+
+    @Override
+    public void refreshData(Music $Music) {
         adapter = new ImageAdapter(getContext(), $Music.getSong_list());
         mRecyclerView.setAdapter(adapter);
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
-    public void heihei(Music $Music){
+    @Override
+    public void moerData(Music $Music) {
         adapter.addData($Music.getSong_list());
         adapter.notifyDataSetChanged();
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
-    public void xixi(){
+    @Override
+    public void error() {
         adapter.setFooterTextView("已经没有歌曲了！");
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
+    @Override
+    public void noData() {
 
-    void loadData(String methed, int type, int size, int offset, boolean isRefresh){
-        LoadDataUtil.loadDataUseCache(methed,type,size,offset,this,isRefresh);
-//        Retrofit mRetrofit = new Retrofit.Builder()
-//                .baseUrl("http://tingapi.ting.baidu.com/")
-//                .addConverterFactory(ScalarsConverterFactory.create())
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-//                .build();
-//        RequestServes mRequestServes = mRetrofit.create(RequestServes.class);
-//        mRequestServes.getString("baidu.ting.billboard.billList",type,size,offset)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .flatMap(new Func1<Music, Observable<SongListEntity>>() {
-//                    @Override
-//                    public Observable<SongListEntity> call(Music $Music) {
-//                        if($Music.getSong_list()!=null) {
-//                            if (isFirst) {
-//                                isFirst = false;
-//                                adapter = new ImageAdapter(getContext(), $Music.getSong_list());
-//                                mRecyclerView.setAdapter(adapter);
-//                                adapter.setOnMoreListener(new OnMoreListener() {
-//                                    @Override
-//                                    public void onClick(View $View) {
-//                                        (mMainActivity).createPopupWindow();
-//                                    }
-//                                });
-//                                adapter.setOnItemListener(new OnItemListener() {
-//                                    @Override
-//                                    public void onClick(View $View) {
-//
-//                                    }
-//                                });
-//                            } else {
-//                                if(!isRefresh) {
-//                                    adapter.addData($Music.getSong_list());
-//                                }else{
-//                                    adapter.refreshData($Music.getSong_list());
-//                                }
-//                                adapter.notifyDataSetChanged();
-//                            }
-//                        }else{
-//                            adapter.setFooterTextView("已经没有歌曲了！");
-//                        }
-//                        mSwipeRefreshLayout.setRefreshing(false);
-//                        return Observable.from($Music.getSong_list());
-//                    }
-//                });
     }
-
 }

@@ -50,17 +50,15 @@ public class LoadDataUtil {
                     @Override
                     public void call(Music $Music) {
                         if(isRefresh){
-                            context.hehe($Music);
+                            context.refreshData($Music);
                         }else{
-                            context.heihei($Music);
+                            context.moerData($Music);
                         }
-                        System.out.println("------offset:"+offset);
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable $Throwable) {
-                        context.xixi();
-                        System.out.println("------$Throwable"+$Throwable.getMessage());
+                        context.noData();
                     }
                 }, new Action0() {
                     @Override
