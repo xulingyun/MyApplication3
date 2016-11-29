@@ -65,9 +65,6 @@ public abstract class BaseFragment extends Fragment {
         return view;
     }
 
-    protected abstract void readCacheData();
-    protected abstract void writeCacheData();
-
     protected abstract void getArgs();
 
     private void setSwipeRefreshLayoutListener() {

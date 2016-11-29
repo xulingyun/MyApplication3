@@ -1,11 +1,43 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              xmlns:app="http://schemas.android.com/apk/res-auto"
              android:layout_height="match_parent"
              tools:context="wc.xulingyun.com.xly.myapplication.ContactsFragment">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay">
+            <RelativeLayout
+                android:id="@+id/toolbar_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center">
+                <TextView
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:id="@+id/left"
+                    android:text="@string/telphone_call_record"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"/>
+                <TextView
+                    android:layout_marginStart="15dp"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:layout_toEndOf="@id/left"
+                    android:id="@+id/right"
+                    android:text="@string/telphone_contacts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"/>
+            </RelativeLayout>
+        </android.support.v7.widget.Toolbar>
+    
     <me.yokeyword.indexablerv.IndexableLayout
+        android:layout_below="@id/toolbar"
         android:id="@+id/indexable_layout"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
@@ -15,4 +47,4 @@
         app:indexBar_selectedTextColor="#f33737"
         app:indexBar_textSize="14sp"
         app:indexBar_textSpace="6dp" />
-</FrameLayout>
+</RelativeLayout>

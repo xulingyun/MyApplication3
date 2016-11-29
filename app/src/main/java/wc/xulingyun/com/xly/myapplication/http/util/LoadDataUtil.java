@@ -52,7 +52,7 @@ public class LoadDataUtil {
                         if(isRefresh){
                             context.refreshData($Music);
                         }else{
-                            context.moerData($Music);
+                            context.moreData($Music);
                         }
                     }
                 }, new Action1<Throwable>() {

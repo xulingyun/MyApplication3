@@ -8,7 +8,7 @@ package wc.xulingyun.com.xly.myapplication;
 public interface GetDataCallback<T> {
 
     void refreshData(T t);
-    void moerData(T t);
+    void moreData(T t);
     void error();
     void noData();
 

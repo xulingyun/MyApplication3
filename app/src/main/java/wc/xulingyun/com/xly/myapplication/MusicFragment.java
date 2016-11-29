@@ -49,16 +49,6 @@ public class MusicFragment extends BaseFragment implements GetDataCallback<Music
     }
 
     @Override
-    protected void readCacheData() {
-
-    }
-
-    @Override
-    protected void writeCacheData() {
-
-    }
-
-    @Override
     protected void getArgs() {
         if (getArguments() != null) {
             kind = Integer.parseInt(getArguments().getString("kind"));
@@ -90,7 +80,7 @@ public class MusicFragment extends BaseFragment implements GetDataCallback<Music
 
     @Override
     protected void loadMore() {
-        mSwipeRefreshLayout.setRefreshing(true);
+//        mSwipeRefreshLayout.setRefreshing(true);
         loadCount++;
         offValue= loadCount*size;
         loadData("baidu.ting.billboard.billList",kind,size,offValue,false);
@@ -108,7 +98,7 @@ public class MusicFragment extends BaseFragment implements GetDataCallback<Music
     }
 
     @Override
-    public void moerData(Music $Music) {
+    public void moreData(Music $Music) {
         adapter.addData($Music.getSong_list());
         adapter.notifyDataSetChanged();
         mSwipeRefreshLayout.setRefreshing(false);

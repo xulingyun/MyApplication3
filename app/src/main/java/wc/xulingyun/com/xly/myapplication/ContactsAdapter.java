@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.support.v7.widget.RecyclerView.*;
 
 import me.yokeyword.indexablerv.IndexableAdapter;
 
@@ -23,36 +24,50 @@ public class ContactsAdapter extends IndexableAdapter<ContactsEntity>{
 
     @Override
     public RecyclerView.ViewHolder onCreateTitleViewHolder(ViewGroup parent) {
-        return null;
+        View view = mInflater.inflate(R.layout.item_tv_title_contact,parent,false);
+        return new ContactsTitleVH(view);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateContentViewHolder(ViewGroup parent) {
-        View view = mInflater.inflate(R.layout.contacts_item, parent, false);
-        return new ContactsVH(view);
+        View view = mInflater.inflate(R.layout.item_contact, parent, false);
+        return new ContactsContentVH(view);
     }
 
     @Override
-    public void onBindTitleViewHolder(RecyclerView.ViewHolder holder, String indexTitle) {
-
+    public void onBindTitleViewHolder(ViewHolder holder, String indexTitle) {
+        ContactsTitleVH vh = (ContactsTitleVH)holder;
+        vh.zimu.setText(indexTitle);
     }
 
     @Override
-    public void onBindContentViewHolder(RecyclerView.ViewHolder holder, ContactsEntity entity) {
-        ContactsVH vh = (ContactsVH)holder;
+    public void onBindContentViewHolder(ViewHolder holder, ContactsEntity entity) {
+        ContactsContentVH vh = (ContactsContentVH)holder;
         vh.name.setText(entity.getName());
         vh.telphone.setText(entity.getTelphone()+"");
     }
 
-    class ContactsVH extends RecyclerView.ViewHolder{
+    class ContactsContentVH extends ViewHolder{
 
         TextView name;
         TextView telphone;
 
-        public ContactsVH(View itemView) {
+        public ContactsContentVH(View itemView) {
             super(itemView);
-            name = (TextView) itemView.findViewById(R.id.name);
-            telphone = (TextView) itemView.findViewById(R.id.telphone);
+            name = (TextView) itemView.findViewById(R.id.tv_name);
+            telphone = (TextView) itemView.findViewById(R.id.tv_mobile);
         }
     }
+
+    class ContactsTitleVH extends ViewHolder{
+
+        TextView zimu;
+
+        public ContactsTitleVH(View itemView) {
+            super(itemView);
+            zimu = (TextView) itemView.findViewById(R.id.tv_title);
+        }
+    }
+
+
 }
