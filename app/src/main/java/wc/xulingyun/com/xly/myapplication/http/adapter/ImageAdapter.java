@@ -36,7 +36,6 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         mFooterViewHolder.mProgressBar.setVisibility(View.INVISIBLE);
     }
 
-
     public void addData(List<SongListEntity> $SongListEntities){
         if(mSongListEntities==null){
             mSongListEntities = new ArrayList<>();
@@ -62,9 +61,8 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         mOnItemListener = $OnItemListener;
     }
 
-    public ImageAdapter(Context $Context, List<SongListEntity> $SongListEntities){
+    public ImageAdapter(Context $Context){
         this.mContext = $Context;
-        this.mSongListEntities = $SongListEntities;
     }
 
     @Override

@@ -56,7 +56,10 @@
         <item>圆通</item>
     </array>
     
-    
+    <array name="telphone">
+        <item>通话记录</item>
+        <item>联系人</item>
+    </array>
     <string name="telphone_call_record">通话记录</string>
     <string name="telphone_contacts">联系人</string>
 

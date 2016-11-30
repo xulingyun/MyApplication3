@@ -61,6 +61,8 @@ public class MusicFragment extends BaseFragment implements GetDataCallback<Music
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new RecycleViewDivider(getContext(),LinearLayoutManager.HORIZONTAL));
+        adapter = new ImageAdapter(getContext());
+
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.red,R.color.colorPrimary,R.color.default_indexBar_selectedTextColor,R.color.colorPrimaryDark);
     }
@@ -92,8 +94,8 @@ public class MusicFragment extends BaseFragment implements GetDataCallback<Music
 
     @Override
     public void refreshData(Music $Music) {
-        adapter = new ImageAdapter(getContext(), $Music.getSong_list());
         mRecyclerView.setAdapter(adapter);
+        adapter.refreshData($Music.getSong_list());
         mSwipeRefreshLayout.setRefreshing(false);
     }
 

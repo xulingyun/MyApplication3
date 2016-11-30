@@ -5,15 +5,16 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupWindow;
 
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import rx.android.schedulers.AndroidSchedulers;
 
 public class MainActivity extends AppCompatActivity implements OnShowOrHideListener{
 
@@ -57,14 +59,14 @@ public class MainActivity extends AppCompatActivity implements OnShowOrHideListe
         getBottomHeight();
 
         TotalMusicFragment lFragment1 = new TotalMusicFragment();
-        ContactsFragment lFragment3 = new ContactsFragment();
-        MusicFragment lFragment4 = MusicFragment.newInstance("11");
-        KuaidiFragment lFragment5 = new KuaidiFragment();
+        MusicFragment lFragment2 = MusicFragment.newInstance("11");
+        TotalContactsFragment lFragment3 = new TotalContactsFragment();
+        KuaidiFragment lFragment4 = new KuaidiFragment();
         mFragmentArrayList = new ArrayList<>();
         mFragmentArrayList.add(lFragment1);
+        mFragmentArrayList.add(lFragment2);
         mFragmentArrayList.add(lFragment3);
         mFragmentArrayList.add(lFragment4);
-        mFragmentArrayList.add(lFragment5);
         mainViewPage.setAdapter(new Mypageradapter(getSupportFragmentManager(),mFragmentArrayList,new String[]{"音乐","照片","电话","快递"}));
 
         lBottomNavigationView.setUpWithViewPager(mainViewPage,
@@ -104,6 +106,22 @@ public class MainActivity extends AppCompatActivity implements OnShowOrHideListe
         lBottomNavigationView.measure(w, h);
         bottomHeight = lBottomNavigationView.getMeasuredHeight();
 //        int width = lBottomNavigationView.getMeasuredWidth();
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("退出")
+                .setMessage("确定退出应用?")
+                .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeButton("否",null);
+        builder.show();
     }
 
     @Override

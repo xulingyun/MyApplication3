@@ -9,45 +9,48 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CallLog;
-import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import me.yokeyword.indexablerv.IndexableAdapter;
-import me.yokeyword.indexablerv.IndexableLayout;
 import wc.xulingyun.com.xly.myapplication.http.adapter.RecycleViewDivider;
 import wc.xulingyun.com.xly.myapplication.http.bean.CallRecord;
 
-public class ContactsFragment extends Fragment {
+public class CallPhoneFragment extends Fragment {
 
-    @BindView(R.id.indexable_layout)
-    IndexableLayout mIndexableLayout;
-    List<ContactsEntity> list;
+    @BindView(R.id.call_phone_recycler)
+    RecyclerView mRecyclerView;
     List<CallRecord> mCallRecordList;
+    List<String> removeSame;
+    CallPhoneRecordAdapter mCallPhoneRecordAdapter;
     private static final int off_y = 2;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_contacts, container, false);
+        View view = inflater.inflate(R.layout.fragment_call_phone, container, false);
         ButterKnife.bind(this,view);
 
-        initTelphoneDatas();
-        ContactsAdapter lContactsAdapter = new ContactsAdapter(getActivity());
-        mIndexableLayout.setAdapter(lContactsAdapter);
-        lContactsAdapter.setDatas(list);
-        mIndexableLayout.getRecyclerView().addOnScrollListener(new RecyclerView.OnScrollListener() {
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.addItemDecoration(new RecycleViewDivider(getContext(),LinearLayoutManager.HORIZONTAL));
+        mCallPhoneRecordAdapter = new CallPhoneRecordAdapter(getContext());
+        mRecyclerView.setAdapter(mCallPhoneRecordAdapter);
+        initCallRecord();
+        mCallPhoneRecordAdapter.addData(mCallRecordList);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -60,18 +63,17 @@ public class ContactsFragment extends Fragment {
                 }
             }
         });
-        mIndexableLayout.getRecyclerView().addItemDecoration(new RecycleViewDivider(getContext(), LinearLayoutManager.HORIZONTAL));
-        lContactsAdapter.setOnItemContentClickListener(new IndexableAdapter.OnItemContentClickListener<ContactsEntity>() {
+        mCallPhoneRecordAdapter.setOnItemListener(new CallPhoneRecordAdapter.OnItemListener() {
             @Override
-            public void onItemClick(View v, int originalPosition, int currentPosition, final ContactsEntity entity) {
+            public void onItemClick(final CallRecord callRecord) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("拨打电话")
-                        .setMessage("是否拨打"+entity.getTelphone()+"?")
+                        .setMessage("是否拨打"+callRecord.getTelphone()+"?")
                         .setPositiveButton("是", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent(Intent.ACTION_CALL);
-                                Uri data = Uri.parse("tel:" + entity.getTelphone());
+                                Uri data = Uri.parse("tel:" + callRecord.getTelphone());
                                 intent.setData(data);
                                 startActivity(intent);
                             }
@@ -83,21 +85,9 @@ public class ContactsFragment extends Fragment {
         return view;
     }
 
-    private List<ContactsEntity> initTelphoneDatas() {
-        list = new ArrayList<>();
-        ContentResolver lContentResolver = getActivity().getContentResolver();
-        Cursor cursor = lContentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-        while (cursor.moveToNext()) {
-            String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-            String telphone = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            ContactsEntity contactEntity = new ContactsEntity(name, telphone);
-            list.add(contactEntity);
-        }
-        return list;
-    }
-
     private List<CallRecord> initCallRecord() {
         mCallRecordList = new ArrayList<>();
+        removeSame = new ArrayList<>();
         ContentResolver lContentResolver = getActivity().getContentResolver();
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED) {
 
@@ -105,12 +95,19 @@ public class ContactsFragment extends Fragment {
             while (cursor.moveToNext()){
                 String name = cursor.getString(cursor.getColumnIndex(CallLog.Calls.CACHED_NAME))!=null?cursor.getString(cursor.getColumnIndex(CallLog.Calls.CACHED_NAME)):"";
                 String telphone = cursor.getString(cursor.getColumnIndex(CallLog.Calls.NUMBER))!=null?cursor.getString(cursor.getColumnIndex(CallLog.Calls.NUMBER)):"";
+                name = name.equals("")?telphone:name;
                 String address = cursor.getString(cursor.getColumnIndex(CallLog.Calls.GEOCODED_LOCATION))!=null?cursor.getString(cursor.getColumnIndex(CallLog.Calls.GEOCODED_LOCATION)):"";
                 String carrieroperator = cursor.getString(cursor.getColumnIndex(CallLog.Calls.TYPE))!=null?cursor.getString(cursor.getColumnIndex(CallLog.Calls.TYPE)):"";
-                String date = cursor.getString(cursor.getColumnIndex(CallLog.Calls.DATE))!=null?cursor.getString(cursor.getColumnIndex(CallLog.Calls.DATE)):"";
-                CallRecord callRecord = new CallRecord(address,carrieroperator,name,date,telphone);
-                System.out.println("------:"+callRecord.toString());
-                mCallRecordList.add(callRecord);
+                String time = cursor.getString(cursor.getColumnIndex(CallLog.Calls.DATE))!=null?cursor.getString(cursor.getColumnIndex(CallLog.Calls.DATE)):"";
+                SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+                String data = format.format(Long.parseLong(time));
+                if(removeSame.contains(name)){
+                    continue;
+                }else{
+                    removeSame.add(name);
+                    CallRecord callRecord = new CallRecord(address,carrieroperator,name,data,telphone);
+                    mCallRecordList.add(callRecord);
+                }
             }
         }else{
             System.out.println("------:------");
