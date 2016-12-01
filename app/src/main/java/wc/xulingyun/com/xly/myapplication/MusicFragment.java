@@ -79,6 +79,7 @@ public class MusicFragment extends BaseFragment implements GetDataCallback<Music
     }
 
     public void createPopupWindow(){
+
         View contentView = LayoutInflater.from(getContext()).inflate(R.layout.popup_layout, null,false);
         PopupWindow mPopupWindow = new PopupWindow(contentView,ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT,true);
         mPopupWindow.setAnimationStyle(R.style.MyPopupWindow);
