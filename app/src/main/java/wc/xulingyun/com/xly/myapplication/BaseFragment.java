@@ -32,8 +32,6 @@ public abstract class BaseFragment extends Fragment {
     SwipeRefreshLayout mSwipeRefreshLayout;
 
 
-
-
     public void setAutoRefresh(boolean $AutoRefresh) {
         isAutoRefresh = $AutoRefresh;
     }
@@ -54,12 +52,12 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getArgs();
-        getViewByLayout(inflater,container);
+        getViewByLayout(inflater, container);
         setView();
         init();
         setRecyclerScrollListener();
         setSwipeRefreshLayoutListener();
-        if(isAutoRefresh()){
+        if (isAutoRefresh()) {
             loadLastData();
         }
         return view;
@@ -82,11 +80,11 @@ public abstract class BaseFragment extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if(off_y<Math.abs(dy)){
-                    if(dy>0){
-                        ((MainActivity)getActivity()).hideBottomMenu();
-                    }else if(dy<0){
-                        ((MainActivity)getActivity()).showBottomMenu();
+                if (off_y < Math.abs(dy)) {
+                    if (dy > 0) {
+                        ((MainActivity) getActivity()).hideBottomMenu();
+                    } else if (dy < 0) {
+                        ((MainActivity) getActivity()).showBottomMenu();
                     }
                 }
 
@@ -151,6 +149,7 @@ public abstract class BaseFragment extends Fragment {
 
     /**
      * 设置fragment的布局
+     *
      * @param $Inflater
      * @param $Container
      */

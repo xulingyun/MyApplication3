@@ -50,6 +50,7 @@ public class CallPhoneFragment extends Fragment {
         mRecyclerView.setAdapter(mCallPhoneRecordAdapter);
         initCallRecord();
         mCallPhoneRecordAdapter.addData(mCallRecordList);
+        mCallPhoneRecordAdapter.setEmptyText("真的没有内容O(∩_∩)O~");
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -99,8 +100,8 @@ public class CallPhoneFragment extends Fragment {
                 String address = cursor.getString(cursor.getColumnIndex(CallLog.Calls.GEOCODED_LOCATION))!=null?cursor.getString(cursor.getColumnIndex(CallLog.Calls.GEOCODED_LOCATION)):"";
                 String carrieroperator = cursor.getString(cursor.getColumnIndex(CallLog.Calls.TYPE))!=null?cursor.getString(cursor.getColumnIndex(CallLog.Calls.TYPE)):"";
                 String time = cursor.getString(cursor.getColumnIndex(CallLog.Calls.DATE))!=null?cursor.getString(cursor.getColumnIndex(CallLog.Calls.DATE)):"";
-                SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
-                String data = format.format(Long.parseLong(time));
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String data = StringUtils.formatSomeAgo(format.format(Long.parseLong(time)));
                 if(removeSame.contains(name)){
                     continue;
                 }else{

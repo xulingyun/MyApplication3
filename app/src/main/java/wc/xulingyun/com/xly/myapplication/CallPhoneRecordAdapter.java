@@ -19,11 +19,16 @@ import wc.xulingyun.com.xly.myapplication.http.bean.CallRecord;
  * 描述：
  */
 
-public class CallPhoneRecordAdapter extends Adapter<CallPhoneRecordAdapter.CallPhoneViewHolder> {
+public class CallPhoneRecordAdapter extends Adapter<ViewHolder> {
 
     Context context;
     List<CallRecord> mRecordList;
     OnItemListener mOnItemListener;
+    String emptyString = "暂无内容";
+
+    public void setEmptyText(String str){
+        this.emptyString = str;
+    }
 
     public void setOnItemListener(OnItemListener $OnItemListener) {
         mOnItemListener = $OnItemListener;
@@ -42,25 +47,45 @@ public class CallPhoneRecordAdapter extends Adapter<CallPhoneRecordAdapter.CallP
     }
 
     @Override
-    public CallPhoneViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.call_phone_record_item,parent,false);
-        return new CallPhoneViewHolder(view);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if(viewType==0) {
+            View view = LayoutInflater.from(context).inflate(R.layout.call_phone_record_item, parent, false);
+            return new CallPhoneViewHolder(view);
+        }else{
+            View view = LayoutInflater.from(context).inflate(R.layout.empty, parent, false);
+            return new CallPhoneEmptyViewHolder(view);
+        }
     }
 
     @Override
-    public void onBindViewHolder(CallPhoneViewHolder holder, final int position) {
-        holder.name.setText(mRecordList.get(position).getName());
-        holder.info.setText(mRecordList.get(position).getTime());
-        holder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mOnItemListener.onItemClick(mRecordList.get(position));
-            }
-        });
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        if(getItemViewType(position)==0) {
+            ((CallPhoneViewHolder)holder).name.setText(mRecordList.get(position).getName());
+            ((CallPhoneViewHolder)holder).info.setText(mRecordList.get(position).getTime());
+            ((CallPhoneViewHolder)holder).view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnItemListener.onItemClick(mRecordList.get(position));
+                }
+            });
+        }else{
+            ((CallPhoneEmptyViewHolder)holder).empty.setText(emptyString);
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(mRecordList.isEmpty()){
+            return -1;
+        }else{
+            return super.getItemViewType(position);
+        }
     }
 
     @Override
     public int getItemCount() {
+        if(mRecordList.isEmpty())
+            return 1;
         return mRecordList.size();
     }
 
@@ -78,7 +103,19 @@ public class CallPhoneRecordAdapter extends Adapter<CallPhoneRecordAdapter.CallP
             super(itemView);
             ButterKnife.bind(this,itemView);
             view = itemView;
+        }
+    }
 
+    class CallPhoneEmptyViewHolder extends ViewHolder{
+
+        @BindView(R.id.empty)
+        TextView empty;
+        View view;
+
+        public CallPhoneEmptyViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this,itemView);
+            view = itemView;
         }
     }
 

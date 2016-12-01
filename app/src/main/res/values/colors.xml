@@ -8,4 +8,5 @@
     <color name="gray">#e4e4e4</color>
     <color name="gray1">#808080</color>
     <color name="black">#000000</color>
+    <color name="half_gray">#33000000</color>
 </resources>

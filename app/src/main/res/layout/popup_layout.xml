@@ -3,8 +3,22 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="vertical"
-              android:background="@color/red">
+              android:paddingStart="10dp"
+              android:background="@color/white">
     <android.support.v7.widget.AppCompatTextView
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:text="歌曲：答应不爱你"
+        android:textSize="15sp"
+        android:textColor="@color/gray1"
+        android:id="@+id/popup_window_song_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:textColor="@color/black"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:layout_width="match_parent"
         android:id="@+id/song_next"
         android:gravity="center_vertical"
@@ -13,6 +27,9 @@
         android:text="@string/song_next"
         android:layout_height="wrap_content" />
     <android.support.v7.widget.AppCompatTextView
+        android:textColor="@color/black"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:id="@+id/song_collect"
@@ -21,6 +38,9 @@
         android:text="@string/song_collect"
         android:layout_height="wrap_content" />
     <android.support.v7.widget.AppCompatTextView
+        android:textColor="@color/black"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:drawablePadding="@dimen/drawable_pidding"
@@ -29,6 +49,9 @@
         android:text="@string/song_comment"
         android:layout_height="wrap_content" />
     <android.support.v7.widget.AppCompatTextView
+        android:textColor="@color/black"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:gravity="center_vertical"
         android:drawablePadding="@dimen/drawable_pidding"
         android:layout_width="match_parent"
@@ -37,6 +60,9 @@
         android:text="@string/song_share"
         android:layout_height="wrap_content" />
     <android.support.v7.widget.AppCompatTextView
+        android:textColor="@color/black"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:drawablePadding="@dimen/drawable_pidding"
@@ -45,6 +71,9 @@
         android:text="@string/song_delete"
         android:layout_height="wrap_content" />
     <android.support.v7.widget.AppCompatTextView
+        android:textColor="@color/black"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:drawablePadding="@dimen/drawable_pidding"
@@ -53,6 +82,9 @@
         android:text="@string/song_songer"
         android:layout_height="wrap_content" />
     <android.support.v7.widget.AppCompatTextView
+        android:textColor="@color/black"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:drawablePadding="@dimen/drawable_pidding"
@@ -61,6 +93,9 @@
         android:text="@string/song_album"
         android:layout_height="wrap_content" />
     <android.support.v7.widget.AppCompatTextView
+        android:textColor="@color/black"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:drawablePadding="@dimen/drawable_pidding"
@@ -69,6 +104,9 @@
         android:text="@string/song_mv"
         android:layout_height="wrap_content" />
     <android.support.v7.widget.AppCompatTextView
+        android:textColor="@color/black"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:gravity="center_vertical"
         android:drawablePadding="@dimen/drawable_pidding"
         android:layout_width="match_parent"

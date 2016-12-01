@@ -6,17 +6,13 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.PopupWindow;
+import android.view.WindowManager;
 
 import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationView;
 
@@ -25,7 +21,6 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import rx.android.schedulers.AndroidSchedulers;
 
 public class MainActivity extends AppCompatActivity implements OnShowOrHideListener{
 
@@ -49,6 +44,10 @@ public class MainActivity extends AppCompatActivity implements OnShowOrHideListe
         return width;
     }
 
+    public int getBottomHeight() {
+        return bottomHeight;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements OnShowOrHideListe
         mUnBinder = ButterKnife.bind(this);
         getWidthAndHeight();
 
-        getBottomHeight();
+        getFirstBottomHeight();
 
         TotalMusicFragment lFragment1 = new TotalMusicFragment();
         MusicFragment lFragment2 = MusicFragment.newInstance("11");
@@ -78,19 +77,6 @@ public class MainActivity extends AppCompatActivity implements OnShowOrHideListe
         lBottomNavigationView.setItemActiveColorWithoutColoredBackground(R.color.red);
     }
 
-    public void createPopupWindow(){
-        View contentView = LayoutInflater.from(MainActivity.this).inflate(R.layout.popup_layout, null);
-        PopupWindow mPopupWindow = new PopupWindow(contentView,width,height*1/2,true);
-        mPopupWindow.setAnimationStyle(R.style.MyPopupWindow);
-        mPopupWindow.setFocusable(true);
-        mPopupWindow.setOutsideTouchable(true);
-        mPopupWindow.setTouchable(true);
-        mPopupWindow.setBackgroundDrawable(new ColorDrawable(0xaa00ff00));
-//        View rootview = LayoutInflater.from(MainActivity.this).inflate(R.layout.content_main, null);
-//        Button lButton = (Button) findViewById(R.id.ceshi);
-//        mPopupWindow.showAsDropDown(toolbar,0,0,Gravity.BOTTOM);
-    }
-
     private void getWidthAndHeight(){
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -98,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements OnShowOrHideListe
         width = dm.widthPixels;
     }
 
-    private void getBottomHeight(){
+    private void getFirstBottomHeight(){
         int w = View.MeasureSpec.makeMeasureSpec(0,
                 View.MeasureSpec.UNSPECIFIED);
         int h = View.MeasureSpec.makeMeasureSpec(0,

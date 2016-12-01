@@ -17,10 +17,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.PopupWindow;
 
 import java.util.ArrayList;
 
 import rx.android.schedulers.AndroidSchedulers;
+
+import static android.R.attr.width;
 
 /**
  * Created by 徐玲郓 on 2016/11/1.

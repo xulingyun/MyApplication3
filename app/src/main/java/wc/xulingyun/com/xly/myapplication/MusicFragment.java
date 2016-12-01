@@ -1,17 +1,23 @@
 package wc.xulingyun.com.xly.myapplication;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.PopupWindow;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import wc.xulingyun.com.xly.myapplication.http.adapter.ImageAdapter;
+import wc.xulingyun.com.xly.myapplication.http.adapter.OnMoreListener;
 import wc.xulingyun.com.xly.myapplication.http.adapter.RecycleViewDivider;
 import wc.xulingyun.com.xly.myapplication.http.bean.Music;
 import wc.xulingyun.com.xly.myapplication.http.bean.SongListEntity;
@@ -62,9 +68,25 @@ public class MusicFragment extends BaseFragment implements GetDataCallback<Music
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new RecycleViewDivider(getContext(),LinearLayoutManager.HORIZONTAL));
         adapter = new ImageAdapter(getContext());
-
+        adapter.setOnMoreListener(new OnMoreListener() {
+            @Override
+            public void onClick(View $View) {
+                createPopupWindow();
+            }
+        });
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.red,R.color.colorPrimary,R.color.default_indexBar_selectedTextColor,R.color.colorPrimaryDark);
+    }
+
+    public void createPopupWindow(){
+        View contentView = LayoutInflater.from(getContext()).inflate(R.layout.popup_layout, null,false);
+        PopupWindow mPopupWindow = new PopupWindow(contentView,ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT,true);
+        mPopupWindow.setAnimationStyle(R.style.MyPopupWindow);
+        mPopupWindow.setFocusable(true);
+        mPopupWindow.setOutsideTouchable(true);
+        mPopupWindow.setTouchable(true);
+        mPopupWindow.setBackgroundDrawable(new ColorDrawable(0xaa00ff00));
+        mPopupWindow.showAtLocation(((MainActivity) getActivity()).lBottomNavigationView, Gravity.BOTTOM,0,0);
     }
 
     @Override
