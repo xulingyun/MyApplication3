@@ -17,22 +17,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center">
-                <TextView
-                    android:textColor="@color/white"
+                <Button
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_centerVertical="true"
                     android:gravity="center"
                     android:id="@+id/left"
+                    android:background="@drawable/left_btn"
                     android:text="@string/telphone_call_record"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"/>
-                <TextView
-                    android:layout_marginStart="15dp"
-                    android:textColor="@color/white"
-                    android:gravity="center"
+                    android:layout_height="wrap_content"/>
+                <!--<Button-->
+                    <!--android:layout_marginTop="15dp"-->
+                    <!--android:layout_marginBottom="15dp"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:layout_toEndOf="@id/left"-->
+                    <!--android:gravity="center"-->
+                    <!--android:id="@+id/middle"-->
+                    <!--android:background="@drawable/middle_btn"-->
+                    <!--android:text="@string/telphone_call_record"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"/>-->
+                <Button
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_centerVertical="true"
                     android:layout_toEndOf="@id/left"
                     android:id="@+id/right"
+                    android:background="@drawable/right_btn"
                     android:text="@string/telphone_contacts"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 

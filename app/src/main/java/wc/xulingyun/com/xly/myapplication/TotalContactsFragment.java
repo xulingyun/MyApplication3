@@ -13,7 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +32,11 @@ public class TotalContactsFragment extends Fragment {
     @BindArray(R.array.telphone)
     String[] title;
     @BindView(R.id.left)
-    TextView left;
+    Button left;
     @BindView(R.id.right)
-    TextView right;
-
+    Button right;
+    @BindView(R.id.toolbar_layout)
+    RelativeLayout toolbar_layout;
     List<Fragment> mList;
 
     @Override
@@ -49,7 +51,8 @@ public class TotalContactsFragment extends Fragment {
         mViewPager.setAdapter(new ContactsViewPagerAdapter(getChildFragmentManager(),mList,title));
         toolbar.setTitle("");
         left.setTextColor(Color.parseColor("#ffffff"));
-        right.setTextColor(Color.parseColor("#e4e4e4"));
+        right.setTextColor(Color.parseColor("#000000"));
+        left.setSelected(true);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -59,11 +62,9 @@ public class TotalContactsFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 if(position==0){
-                    left.setTextColor(Color.parseColor("#ffffff"));
-                    right.setTextColor(Color.parseColor("#e4e4e4"));
+                    setSelectButton(left);
                 }else if(position==1){
-                    left.setTextColor(Color.parseColor("#e4e4e4"));
-                    right.setTextColor(Color.parseColor("#ffffff"));
+                    setSelectButton(right);
                 }
             }
 
@@ -75,22 +76,32 @@ public class TotalContactsFragment extends Fragment {
         left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                left.setTextColor(Color.parseColor("#ffffff"));
-                right.setTextColor(Color.parseColor("#e4e4e4"));
+                setSelectButton(left);
                 mViewPager.setCurrentItem(0,true);
             }
         });
         right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                left.setTextColor(Color.parseColor("#e4e4e4"));
-                right.setTextColor(Color.parseColor("#ffffff"));
+                setSelectButton(right);
                 mViewPager.setCurrentItem(1,true);
             }
         });
         colorChange();
         return view;
     }
+
+    void setSelectButton(Button view){
+        int count = toolbar_layout.getChildCount();
+        for (int i = 0; i < count; i++) {
+            ((Button)toolbar_layout.getChildAt(i)).setTextColor(Color.parseColor("#000000"));
+            toolbar_layout.getChildAt(i).setSelected(false);
+        }
+        view.setTextColor(Color.parseColor("#ffffff"));
+        view.setSelected(true);
+    }
+
+
 
     /**
      * 界面颜色的更改
