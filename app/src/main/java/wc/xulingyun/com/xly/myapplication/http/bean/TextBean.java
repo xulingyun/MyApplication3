@@ -10,7 +10,7 @@ public abstract class TextBean {
     /**
      * 默认有效期限是1小时： 60 * 60 * 1000
      */
-    private static final long EXPIRE_LIMIT = 60 * 60 * 1000;
+    private static final long EXPIRE_LIMIT = 12*60 * 60 * 1000;
     private long mCreateTime;
 
     public TextBean() {

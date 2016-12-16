@@ -7,5 +7,5 @@ import android.view.View;
  * 描述：
  */
 public interface OnItemListener {
-    void onClick(View $View);
+    void onClick(View $View,int postion);
 }

@@ -1,9 +1,12 @@
 package wc.xulingyun.com.xly.myapplication.http;
 
 
+import okhttp3.ResponseBody;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 import rx.Observable;
+import wc.xulingyun.com.xly.myapplication.dao.SongInfo;
 import wc.xulingyun.com.xly.myapplication.http.bean.Music;
 
 /**
@@ -25,4 +28,11 @@ public interface RequestServes {
                                 @Query("type") int type,
                                 @Query("size") int size,
                                 @Query("offset") int offset);
+    @GET("v1/restserver/ting")
+    Observable<SongInfo>  getSongInfo(@Query("method") String method,
+                                      @Query("songid") String songid);
+
+    @GET
+    Observable<ResponseBody> download(@Url String url);
+
 }

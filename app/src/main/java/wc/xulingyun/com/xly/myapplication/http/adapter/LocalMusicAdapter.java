@@ -62,9 +62,10 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<LocalMusicAdapter.Im
     public void onClick(View $View) {
         if(mOnMoreListener!=null&&$View.getId()==R.id.more){
             mOnMoreListener.onClick($View);
-        }else if(mOnItemListener!=null&&$View.getId()==R.id.music_item){
-            mOnItemListener.onClick($View);
         }
+//        else if(mOnItemListener!=null&&$View.getId()==R.id.music_item){
+//            mOnItemListener.onClick($View);
+//        }
     }
 
     class ImageViewHolder extends RecyclerView.ViewHolder {

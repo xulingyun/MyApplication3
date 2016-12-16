@@ -1,5 +1,6 @@
 package wc.xulingyun.com.xly.myapplication;
 
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,13 +11,14 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.PopupWindow;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
+import wc.xulingyun.com.xly.myapplication.activity.AudioActivity;
 import wc.xulingyun.com.xly.myapplication.http.adapter.ImageAdapter;
+import wc.xulingyun.com.xly.myapplication.http.adapter.OnItemListener;
 import wc.xulingyun.com.xly.myapplication.http.adapter.OnMoreListener;
 import wc.xulingyun.com.xly.myapplication.http.adapter.RecycleViewDivider;
 import wc.xulingyun.com.xly.myapplication.http.bean.Music;
@@ -30,7 +32,7 @@ import wc.xulingyun.com.xly.myapplication.http.util.LoadDataUtil;
 
 public class MusicFragment extends BaseFragment implements GetDataCallback<Music>{
 
-    List<SongListEntity> mSongListEntities;
+    ArrayList<SongListEntity> mSongListEntities;
     boolean isFirst = true;
     ImageAdapter adapter;
     int offValue = 0;
@@ -72,6 +74,17 @@ public class MusicFragment extends BaseFragment implements GetDataCallback<Music
             @Override
             public void onClick(View $View) {
                 createPopupWindow();
+            }
+        });
+        adapter.setOnItemListener(new OnItemListener() {
+            @Override
+            public void onClick(View $View,int postion) {
+                Intent lIntent = new Intent(getActivity(), AudioActivity.class);
+                lIntent.putExtra("postion",postion);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("audioList", (Serializable) adapter.getSongListEntities());
+                lIntent.putExtras(bundle);
+                startActivity(lIntent);
             }
         });
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);

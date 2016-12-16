@@ -5,11 +5,13 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by 徐玲郓 on 2016/10/24.
  * 描述：
  */
-public class SongListEntity {
+public class SongListEntity implements Serializable{
 
     /**
      * artist_id : 121515348

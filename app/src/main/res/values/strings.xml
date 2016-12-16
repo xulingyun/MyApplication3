@@ -64,5 +64,6 @@
     <string name="telphone_contacts">联系人</string>
 
     <string name="empty">暂无内容</string>
+    <string name="initTime">00:00</string>
 
 </resources>

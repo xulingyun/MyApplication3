@@ -9,4 +9,8 @@
     <color name="gray1">#808080</color>
     <color name="black">#000000</color>
     <color name="half_gray">#33000000</color>
+
+    <color name="mediacontroller_bg_pressed">#ff53c1bd</color>
+    <color name="mediacontroller_bg">#99000000</color>
+    <color name="transparent">#00000000</color>
 </resources>

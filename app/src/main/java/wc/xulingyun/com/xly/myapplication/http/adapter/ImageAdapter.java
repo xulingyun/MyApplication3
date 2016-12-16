@@ -28,6 +28,11 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private OnMoreListener mOnMoreListener;
     private OnItemListener mOnItemListener;
     private Context mContext;
+
+    public List<SongListEntity> getSongListEntities() {
+        return mSongListEntities;
+    }
+
     private List<SongListEntity> mSongListEntities;
     private FooterViewHolder mFooterViewHolder;
 
@@ -79,7 +84,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if(holder instanceof MusicViewHolder){
             SongListEntity lSongListEntity = mSongListEntities.get(position);
             Uri uri = Uri.parse(lSongListEntity.getPic_small());
@@ -87,6 +92,12 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ((MusicViewHolder)holder).title.setText(lSongListEntity.getTitle());
             ((MusicViewHolder)holder).author.setText(lSongListEntity.getAuthor() + "·" + lSongListEntity.getAlbum_title());
             ((MusicViewHolder)holder).mAppCompatImageView.setOnClickListener(this);
+            ((MusicViewHolder)holder).itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnItemListener.onClick(v,position);
+                }
+            });
         }else if(holder instanceof FooterViewHolder){
             mFooterViewHolder = ((FooterViewHolder)holder);
             mFooterViewHolder.tv.setText(R.string.load_more_loading);
@@ -103,9 +114,10 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onClick(View $View) {
         if(mOnMoreListener!=null&&$View.getId()==R.id.more){
             mOnMoreListener.onClick($View);
-        }else if(mOnItemListener!=null&&$View.getId()==R.id.music_item){
-            mOnItemListener.onClick($View);
         }
+//        else if(mOnItemListener!=null&&$View.getId()==R.id.music_item){
+//            mOnItemListener.onClick($View);
+//        }
     }
 
     @Override
@@ -122,6 +134,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         SimpleDraweeView mImageView;
         TextView title;
         TextView author;
+        View itemView;
         AppCompatImageView mAppCompatImageView;
         public MusicViewHolder(View itemView) {
             super(itemView);
@@ -129,6 +142,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             title = (TextView) itemView.findViewById(R.id.song);
             author = (TextView) itemView.findViewById(R.id.song_author);
             mAppCompatImageView = (AppCompatImageView) itemView.findViewById(R.id.more);
+            this.itemView = itemView;
         }
     }
 
