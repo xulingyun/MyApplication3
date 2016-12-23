@@ -105,47 +105,39 @@ public class LoadDataUtil {
 
         Observable<SongInfo> observable = CacheManager.getInstance().load(url, SongInfo.class, networkCache);
         observable.subscribe(
-                new Action1<SongInfo>() {
-                    @Override
-                    public void call(SongInfo $SongInfo) {
-                        service.initMediaPlayer($SongInfo);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable $Throwable) {
-//                        context.noData();
-                    }
-                }, new Action0() {
-                    @Override
-                    public void call() {
-
-                    }
+            new Action1<SongInfo>() {
+                @Override
+                public void call(SongInfo $SongInfo) {
+                    service.initMediaPlayer($SongInfo);
                 }
+            }, new Action1<Throwable>() {
+                @Override
+                public void call(Throwable $Throwable) {
+//                        context.noData();
+                }
+            }, new Action0() {
+                @Override
+                public void call() {
+
+                }
+            }
         );
     }
 
-
-    public static void loadLrc(String url,String name, final Context context) {
+    public static void loadLrc(String url, final String name, final Context context) {
         File file = MyAppcation.getInstance().getExternalCacheDirectory(context,"");
         final File file1 = new File(file.getAbsoluteFile(),name);
-        GreenDaoAudioDao dao = GreenDaoUtils.getSingleTon().getmDaoSession().getGreenDaoAudioDao();
-        List<GreenDaoAudio> lGreenDaoAudios = dao.queryRaw("where SONG_NAME=?",name);
+        final GreenDaoAudioDao dao = GreenDaoUtils.getSingleTon().getmDaoSession().getGreenDaoAudioDao();
+        List<GreenDaoAudio> lGreenDaoAudios = dao.queryRaw("where SONG_NAME=? and SONG_LRC_PATH=?",name,file1.getAbsolutePath());
         if(lGreenDaoAudios.size()>=1){
-            System.out.println("数据库：数据存在"+lGreenDaoAudios.get(0).getSongName());
-        }else{
-            System.out.println("数据库：数据不存在");
-        }
-        GreenDaoAudio audio = new GreenDaoAudio(null,name,file1.getAbsolutePath());
-        dao.insert(audio);
-        if(!file1.exists()){
-            try {
-                file1.createNewFile();
-            } catch (IOException $E) {
-                $E.printStackTrace();
+            if(file1.exists()){
+                ((AudioActivity) context).initSong(file1.getAbsolutePath());
+                return;
+            }else {
+                for (GreenDaoAudio audio:lGreenDaoAudios){
+                    dao.delete(audio);
+                }
             }
-        }else{
-            ((AudioActivity)context).initSong(file1.getAbsolutePath());
-            return;
         }
         Retrofit mRetrofit = new Retrofit.Builder()
                 .baseUrl("http://musicdata.baidu.com/data2/lrc/")
@@ -165,6 +157,7 @@ public class LoadDataUtil {
                     @Override
                     public void call(InputStream inputStream) {
                         try {
+                            file1.createNewFile();
                             FileOutputStream fileOutputStream = new FileOutputStream(file1,true);
                             byte[] b = new byte[1024];
                             while (inputStream.read(b)!=-1){
@@ -184,6 +177,9 @@ public class LoadDataUtil {
                 .subscribe(new Subscriber<InputStream>() {
                     @Override
                     public void onCompleted() {
+
+                        GreenDaoAudio audio = new GreenDaoAudio(null,file1.getName(),file1.getAbsolutePath());
+                        dao.insert(audio);
                         ((AudioActivity)context).initSong(file1.getAbsolutePath());
                     }
 

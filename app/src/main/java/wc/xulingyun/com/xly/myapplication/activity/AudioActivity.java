@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
@@ -42,6 +43,7 @@ public class AudioActivity extends AppCompatActivity implements View.OnClickList
     MyTextView singName;
     MyTextView singerName;
     LrcTextView song;
+    ImageView notifi_icon;
     NotificationManager notificationManager;
     public static final String BROADCAST_ACTION = "com.xulingyun.sing.BROADCAST";
     int pos;
@@ -110,6 +112,7 @@ public class AudioActivity extends AppCompatActivity implements View.OnClickList
                         notification.tickerText=mSongInfo.getSonginfo().getTitle();
                         notification.contentView.setTextViewText(R.id.notifications_sing,mSongInfo.getSonginfo().getAuthor());
                         notification.contentView.setTextViewText(R.id.notifications_singer,mSongInfo.getSonginfo().getAlbum_title());
+                        notification.contentView.setImageViewUri(R.id.sing_icon, Uri.parse(mSongInfo.getSonginfo().getPic_small()));
                         notificationManager.notify(1500,notification);
                     }
                 });
@@ -256,7 +259,6 @@ public class AudioActivity extends AppCompatActivity implements View.OnClickList
     private void createNotifications(){
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
         RemoteViews remoteViews = new RemoteViews(getPackageName(),R.layout.notification_layout);
-
         Intent stopOrStartIntent = new Intent();
         stopOrStartIntent.setAction(BROADCAST_ACTION);
         stopOrStartIntent.putExtra("index",0);
