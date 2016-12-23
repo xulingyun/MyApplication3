@@ -3,7 +3,10 @@ package wc.xulingyun.com.xly.myapplication.http.util;
 import android.content.Context;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Locale;
 
 import okhttp3.ResponseBody;
@@ -12,6 +15,7 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import rx.Observable;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Action1;
@@ -19,6 +23,10 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import wc.xulingyun.com.xly.myapplication.MusicFragment;
 import wc.xulingyun.com.xly.myapplication.MyAppcation;
+import wc.xulingyun.com.xly.myapplication.activity.AudioActivity;
+import wc.xulingyun.com.xly.myapplication.dao.GreenDaoAudio;
+import wc.xulingyun.com.xly.myapplication.dao.GreenDaoAudioDao;
+import wc.xulingyun.com.xly.myapplication.dao.GreenDaoUtils;
 import wc.xulingyun.com.xly.myapplication.dao.SongInfo;
 import wc.xulingyun.com.xly.myapplication.http.RequestServes;
 import wc.xulingyun.com.xly.myapplication.http.bean.Music;
@@ -117,9 +125,28 @@ public class LoadDataUtil {
     }
 
 
-    public static void loadLrc(String url, Context context) {
+    public static void loadLrc(String url,String name, final Context context) {
         File file = MyAppcation.getInstance().getExternalCacheDirectory(context,"");
-        System.out.println("路径:"+file.getAbsolutePath());
+        final File file1 = new File(file.getAbsoluteFile(),name);
+        GreenDaoAudioDao dao = GreenDaoUtils.getSingleTon().getmDaoSession().getGreenDaoAudioDao();
+        List<GreenDaoAudio> lGreenDaoAudios = dao.queryRaw("where SONG_NAME=?",name);
+        if(lGreenDaoAudios.size()>=1){
+            System.out.println("数据库：数据存在"+lGreenDaoAudios.get(0).getSongName());
+        }else{
+            System.out.println("数据库：数据不存在");
+        }
+        GreenDaoAudio audio = new GreenDaoAudio(null,name,file1.getAbsolutePath());
+        dao.insert(audio);
+        if(!file1.exists()){
+            try {
+                file1.createNewFile();
+            } catch (IOException $E) {
+                $E.printStackTrace();
+            }
+        }else{
+            ((AudioActivity)context).initSong(file1.getAbsolutePath());
+            return;
+        }
         Retrofit mRetrofit = new Retrofit.Builder()
                 .baseUrl("http://musicdata.baidu.com/data2/lrc/")
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -127,23 +154,47 @@ public class LoadDataUtil {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
         RequestServes mRequestServes = mRetrofit.create(RequestServes.class);
-        mRequestServes.download("ed5225acf833564a28ccc105dd529014/278924740/278924740.lrc")
+        mRequestServes.download(url)
                 .map(new Func1<ResponseBody, InputStream>() {
                     @Override
                     public InputStream call(ResponseBody responseBody) {
-                        System.out.println("路径:123");
                         return responseBody.byteStream();
                     }
                 })
                 .doOnNext(new Action1<InputStream>() {
                     @Override
-                    public void call(InputStream $InputStream) {
-                        System.out.println("路径:789");
+                    public void call(InputStream inputStream) {
+                        try {
+                            FileOutputStream fileOutputStream = new FileOutputStream(file1,true);
+                            byte[] b = new byte[1024];
+                            while (inputStream.read(b)!=-1){
+                                fileOutputStream.write(b,0,b.length);
+                            }
+                            fileOutputStream.flush();
+                            fileOutputStream.close();
+                        } catch (Exception $E) {
+                            $E.printStackTrace();
+                        }
+
                     }
                 })
                 .onBackpressureBuffer()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io());
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<InputStream>() {
+                    @Override
+                    public void onCompleted() {
+                        ((AudioActivity)context).initSong(file1.getAbsolutePath());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(InputStream $InputStream) {
+                    }
+                });
 
     }
 //        return Observable.create(new Observable.OnSubscribe<FileInfo>() {

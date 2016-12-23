@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/audio_bg">
+
+
+    <wc.xulingyun.com.xly.myapplication.view.MyTextView
+        android:id="@+id/sing_name"
+        android:gravity="center"
+        android:layout_marginTop="5dp"
+        android:layout_alignParentTop="true"
+        android:text="刀马旦"
+        android:ellipsize="marquee"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:maxLines="1"
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
+
+
+    <wc.xulingyun.com.xly.myapplication.view.MyTextView
+        android:maxLines="1"
+        android:ellipsize="marquee"
+        android:id="@+id/singer_name"
+        android:gravity="center"
+        android:layout_below="@+id/sing_name"
+        android:text="李玟和周杰伦"
+        android:textStyle="italic"
+        android:textColor="@color/gray"
+        android:textSize="15sp"
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+
+    <LinearLayout
+        android:id="@+id/controller_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp">
+
+        <ImageView
+            android:id="@+id/play_mode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/ic_loop_white_36dp" />
+
+        <ImageView
+            android:id="@+id/previous"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/ic_skip_previous_white_36dp" />
+
+        <ImageView
+            android:id="@+id/stop_start"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/ic_play_circle_outline_white_36dp" />
+
+        <ImageView
+            android:id="@+id/next"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/ic_skip_next_white_36dp" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/ic_list_white_24dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/controller_time_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/controller_layout"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/play_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="00:10"
+            android:textColor="@color/white" />
+
+        <android.support.v7.widget.AppCompatSeekBar
+            android:layout_marginTop="10dp"
+            android:id="@+id/progress_bar"
+            style="@style/MediaController_SeekBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:focusable="true"
+            android:max="100" />
+
+        <TextView
+            android:id="@+id/total_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="03:10"
+            android:textColor="@color/white" />
+    </LinearLayout>
+    <wc.xulingyun.com.xly.myapplication.view.LrcTextView
+        android:id="@+id/song"
+        android:layout_below="@id/singer_name"
+        android:layout_above="@id/controller_time_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true" />
+</RelativeLayout>
