@@ -6,7 +6,7 @@
     <ImageView
         android:id="@+id/sing_icon"
         android:layout_width="72dp"
-        android:layout_height="match_parent"
+        android:layout_height="72dp"
         android:layout_alignParentStart="true"
         android:src="@drawable/ic_music_note_red_900_24dp" />
 

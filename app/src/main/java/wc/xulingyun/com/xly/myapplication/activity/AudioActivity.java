@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -19,6 +21,8 @@ import android.widget.RemoteViews;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import wc.xulingyun.com.xly.myapplication.R;
@@ -43,7 +47,6 @@ public class AudioActivity extends AppCompatActivity implements View.OnClickList
     MyTextView singName;
     MyTextView singerName;
     LrcTextView song;
-    ImageView notifi_icon;
     NotificationManager notificationManager;
     public static final String BROADCAST_ACTION = "com.xulingyun.sing.BROADCAST";
     int pos;
@@ -79,6 +82,21 @@ public class AudioActivity extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        intent = getIntent();
+        Intent intent1 = new Intent(this,PlayAudioService.class);
+        pos = intent.getIntExtra("postion", 0);
+        list1 = (ArrayList<SongListEntity>) intent.getSerializableExtra("audioList");
+        intent1.putExtra("postion", intent.getIntExtra("postion", 0));
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("audioList", (ArrayList<SongListEntity>) intent.getSerializableExtra("audioList"));
+        intent1.putExtras(bundle);
+        intent1.setAction("com.xulingyun.media.MUSIC_SERVICE");
+        bindService(intent1, sc, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.music_layout);
@@ -107,13 +125,27 @@ public class AudioActivity extends AppCompatActivity implements View.OnClickList
                 });
                 ps.setOnUiListener(new PlayAudioService.OnUiListener() {
                     @Override
-                    public void ui(SongInfo mSongInfo) {
+                    public void ui(final SongInfo mSongInfo) {
                         initUi(mSongInfo);
                         notification.tickerText=mSongInfo.getSonginfo().getTitle();
-                        notification.contentView.setTextViewText(R.id.notifications_sing,mSongInfo.getSonginfo().getAuthor());
-                        notification.contentView.setTextViewText(R.id.notifications_singer,mSongInfo.getSonginfo().getAlbum_title());
-                        notification.contentView.setImageViewUri(R.id.sing_icon, Uri.parse(mSongInfo.getSonginfo().getPic_small()));
-                        notificationManager.notify(1500,notification);
+                        notification.contentView.setTextViewText(R.id.notifications_sing,mSongInfo.getSonginfo().getTitle());
+                        notification.contentView.setTextViewText(R.id.notifications_singer,mSongInfo.getSonginfo().getAuthor()+" - " +mSongInfo.getSonginfo().getAlbum_title());
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+//                                    String temp = mSongInfo.getSonginfo().getPic_small();
+                                    URL picUrl = new URL(mSongInfo.getSonginfo().getPic_small());
+                                    Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream());
+                                    notification.contentView.setImageViewBitmap(R.id.sing_icon,pngBM);
+                                } catch (Exception $E) {
+                                    $E.printStackTrace();
+                                }finally {
+                                    notificationManager.notify(1500,notification);
+                                }
+                            }
+                        }).start();
                     }
                 });
             }
@@ -155,21 +187,6 @@ public class AudioActivity extends AppCompatActivity implements View.OnClickList
         };
         registerReceiver(broadcastReceiver,filter);
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        intent = getIntent();
-        Intent intent1 = new Intent(this,PlayAudioService.class);
-        pos = intent.getIntExtra("postion", 0);
-        list1 = (ArrayList<SongListEntity>) intent.getSerializableExtra("audioList");
-        intent1.putExtra("postion", intent.getIntExtra("postion", 0));
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("audioList", (ArrayList<SongListEntity>) intent.getSerializableExtra("audioList"));
-        intent1.putExtras(bundle);
-        intent1.setAction("com.xulingyun.media.MUSIC_SERVICE");
-        bindService(intent1, sc, Context.BIND_AUTO_CREATE);
     }
 
     private void initUi(SongInfo mSongInfo) {
@@ -253,7 +270,6 @@ public class AudioActivity extends AppCompatActivity implements View.OnClickList
         unregisterReceiver(broadcastReceiver);
         notificationManager.cancel(1500);
         unbindService(sc);
-        System.out.println("-----------------ServiceConnection----------------onDestroy");
     }
 
     private void createNotifications(){
