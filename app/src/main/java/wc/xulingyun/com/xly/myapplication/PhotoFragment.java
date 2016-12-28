@@ -8,6 +8,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,9 +17,9 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import wc.xulingyun.com.xly.myapplication.http.adapter.LocalMusicAdapter;
+import wc.xulingyun.com.xly.myapplication.dao.ImageDao;
+import wc.xulingyun.com.xly.myapplication.http.adapter.PhotoAdapter;
 import wc.xulingyun.com.xly.myapplication.http.adapter.RecycleViewDivider;
-import wc.xulingyun.com.xly.myapplication.http.bean.LocalMusic;
 
 /**
  * Created by 徐玲郓 on 2016/11/1.
@@ -33,7 +34,7 @@ public class PhotoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.photo_fragment,container,false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.local_music_recycler);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new RecycleViewDivider(getContext(),LinearLayoutManager.HORIZONTAL));
         scanMusic();
@@ -43,18 +44,22 @@ public class PhotoFragment extends Fragment {
 
     private void scanMusic(){
         ContentResolver lContentResolver = getActivity().getContentResolver();
-        Uri lUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Cursor lCursor = lContentResolver.query(lUri,null,null, null,MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
-        ArrayList<LocalMusic> list = new ArrayList<>();
-        LocalMusic localMisic;
-        while (lCursor.moveToNext()){
-            int i = lCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
-            int j = lCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
-            int k = lCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
-            localMisic = new LocalMusic(lCursor.getString(j),lCursor.getString(i),lCursor.getString(k));
-            list.add(localMisic);
+        Uri lUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        Cursor lCursor = lContentResolver.query(lUri,null,null,null,MediaStore.Images.Media.DATE_MODIFIED);
+        if(lCursor==null){
+            return;
         }
-        mRecyclerView.setAdapter(new LocalMusicAdapter(getActivity(),list));
+        ArrayList<ImageDao> list = new ArrayList<>();
+        ImageDao mImageDao;
+        while (lCursor.moveToNext()){
+            int i = lCursor.getColumnIndex(MediaStore.Images.Media.DATA);
+            int j = lCursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME);
+//            int k = lCursor.getColumnIndex(MediaStore.Images.Media.WIDTH);
+//            int l = lCursor.getColumnIndex(MediaStore.Images.Media.HEIGHT);
+            mImageDao = new ImageDao(lCursor.getString(j),lCursor.getString(i));
+            list.add(mImageDao);
+        }
+        mRecyclerView.setAdapter(new PhotoAdapter(getActivity(),list));
 
 
 //        Observable.just(lCursor)

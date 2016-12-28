@@ -58,7 +58,8 @@ public class MainActivity extends AppCompatActivity implements OnShowOrHideListe
         getFirstBottomHeight();
 
         TotalMusicFragment lFragment1 = new TotalMusicFragment();
-        MusicFragment lFragment2 = MusicFragment.newInstance("11");
+//        MusicFragment lFragment2 = MusicFragment.newInstance("11");
+        PhotoFragment lFragment2 = new PhotoFragment();
         TotalContactsFragment lFragment3 = new TotalContactsFragment();
         KuaidiFragment lFragment4 = new KuaidiFragment();
         mFragmentArrayList = new ArrayList<>();

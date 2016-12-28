@@ -31,7 +31,7 @@
         android:layout_toEndOf="@id/sing_icon"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textColor="@color/gray"
+        android:textColor="@color/black"
         android:textSize="12sp" />
 
     <ImageView

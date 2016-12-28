@@ -10,18 +10,17 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -142,10 +141,10 @@ public class AudioActivity extends AppCompatActivity implements View.OnClickList
                                 } catch (Exception $E) {
                                     $E.printStackTrace();
                                 }finally {
-                                    notificationManager.notify(1500,notification);
                                 }
                             }
                         }).start();
+                        notificationManager.notify(1500,notification);
                     }
                 });
             }
