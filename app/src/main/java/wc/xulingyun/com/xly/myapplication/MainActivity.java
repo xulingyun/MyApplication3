@@ -104,7 +104,8 @@ public class MainActivity extends AppCompatActivity implements OnShowOrHideListe
                 .setPositiveButton("是", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        finish();
+//                        System.exit(0);
+                        android.os.Process.killProcess(android.os.Process.myPid());
                     }
                 })
                 .setNegativeButton("否",null);

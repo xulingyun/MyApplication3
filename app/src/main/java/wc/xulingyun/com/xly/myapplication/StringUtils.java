@@ -321,6 +321,16 @@ public class StringUtils {
         return false;
     }
 
+    public static String timeStampToDate(String s){
+        String res;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日");
+        long lt = new Long(s);
+        Date date = new Date(lt*1000);
+        res = simpleDateFormat.format(date);
+        return res;
+    }
+
+
     /**
      * 是否是相同的一天
      *

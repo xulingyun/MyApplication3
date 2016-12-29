@@ -1,20 +1,24 @@
 package wc.xulingyun.com.xly.myapplication.http.adapter;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
-
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import wc.xulingyun.com.xly.myapplication.R;
 import wc.xulingyun.com.xly.myapplication.dao.ImageDao;
+import wc.xulingyun.com.xly.myapplication.http.util.Utils;
+
+import static wc.xulingyun.com.xly.myapplication.PhotoFragment.spanCount;
 
 /**
  * Created by 徐玲郓 on 2016/12/28.
@@ -23,14 +27,22 @@ import wc.xulingyun.com.xly.myapplication.dao.ImageDao;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ImageVH>{
 
-    List<ImageDao> list;
+    private HashMap<String, List<ImageDao>> map;
+    private ArrayList<String> list;
     LayoutInflater mInflater;
+    int width = 0;
+    int showImageHeight;
+    private Context context;
 
-    public PhotoAdapter(Context context, List<ImageDao> list) {
+
+    public PhotoAdapter(Context context, HashMap<String, List<ImageDao>> map,ArrayList<String> list) {
+        this.context = context;
+        this.map = map;
         this.list = list;
         mInflater = LayoutInflater.from(context);
+        width = Utils.getWindowWidth(context);
+        showImageHeight = (int)(width*1.0f/ spanCount);
     }
-
 
     @Override
     public ImageVH onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -40,9 +52,12 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ImageVH>{
 
     @Override
     public void onBindViewHolder(ImageVH holder, int position) {
-        System.out.println("图片路径："+"content://"+list.get(position).getPath());
-
-        holder.simpleDraweeView.setImageURI(Uri.parse("content://"+list.get(position).getPath()));
+//        holder.simpleDraweeView.setImageURI(Uri.parse("file://"+list.get(position).getPath()));
+        holder.title.setText(list.get(position));
+        holder.mRecyclerView.setLayoutManager(new GridLayoutManager(context,spanCount));
+        holder.mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+//        holder.mRecyclerView.addItemDecoration(new RecycleViewDivider(context, LinearLayoutManager.HORIZONTAL));
+        holder.mRecyclerView.setAdapter(new PhotoItemAdapter(context,map.get(list.get(position))));
     }
 
     @Override
@@ -51,10 +66,16 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ImageVH>{
     }
 
     class ImageVH extends RecyclerView.ViewHolder{
-        SimpleDraweeView simpleDraweeView;
+//        SimpleDraweeView simpleDraweeView;
+        TextView title;
+        RecyclerView mRecyclerView;
+
+
         public ImageVH(View itemView) {
             super(itemView);
-            simpleDraweeView = (SimpleDraweeView) itemView.findViewById(R.id.photo);
+            title = (TextView) itemView.findViewById(R.id.title);
+            mRecyclerView = (RecyclerView) itemView.findViewById(R.id.item_recycler);
+//            simpleDraweeView.getLayoutParams().height= showImageHeight;
         }
     }
 }
