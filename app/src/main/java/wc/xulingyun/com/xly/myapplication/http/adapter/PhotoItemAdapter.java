@@ -1,13 +1,15 @@
 package wc.xulingyun.com.xly.myapplication.http.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -25,16 +27,19 @@ import static wc.xulingyun.com.xly.myapplication.PhotoFragment.spanCount;
 public class PhotoItemAdapter extends RecyclerView.Adapter<PhotoItemAdapter.ImageVH>{
 
     private List<ImageDao> list;
-    LayoutInflater mInflater;
-    int width = 0;
-    int showImageHeight;
-
+    private LayoutInflater mInflater;
+    private int width = 0;
+    private int showImageWidth;
+    private Context mContext;
+    private ViewGroup.LayoutParams lp;
+    private int dynamicsHeight;
 
     public PhotoItemAdapter(Context context, List<ImageDao> list) {
+        this.mContext = context;
         this.list = list;
         mInflater = LayoutInflater.from(context);
         width = Utils.getWindowWidth(context);
-        showImageHeight = (int)(width*1.0f/ spanCount);
+        showImageWidth = (int)((width-70)*1.0f/ spanCount);
     }
 
     @Override
@@ -45,7 +50,19 @@ public class PhotoItemAdapter extends RecyclerView.Adapter<PhotoItemAdapter.Imag
 
     @Override
     public void onBindViewHolder(ImageVH holder, int position) {
-        holder.simpleDraweeView.setImageURI(Uri.parse("file://"+list.get(position).getPath()));
+//        holder.simpleDraweeView.getHierarchy().setActualImageFocusPoint(focusPoint);
+//        holder.simpleDraweeView.setImageURI(Uri.parse("file://"+list.get(position).getPath()));
+        lp = holder.simpleDraweeView.getLayoutParams();
+        dynamicsHeight = (int)(list.get(position).getHeight()*1.0f/list.get(position).getWidth()*width/spanCount);
+        lp.width = showImageWidth;
+        lp.height = dynamicsHeight;
+        Picasso.with(mContext)
+                .load(Uri.parse("file://"+list.get(position).getPath()))
+                .resize(showImageWidth, dynamicsHeight)
+                .config(Bitmap.Config.RGB_565)
+                .centerInside()
+                .into(holder.simpleDraweeView);
+        System.out.println("屏幕的宽："+width+",宽："+showImageWidth+",高："+dynamicsHeight);
     }
 
     @Override
@@ -54,13 +71,13 @@ public class PhotoItemAdapter extends RecyclerView.Adapter<PhotoItemAdapter.Imag
     }
 
     class ImageVH extends RecyclerView.ViewHolder{
-        SimpleDraweeView simpleDraweeView;
+        ImageView simpleDraweeView;
 
 
         public ImageVH(View itemView) {
             super(itemView);
-            simpleDraweeView = (SimpleDraweeView) itemView.findViewById(R.id.photo);
-            simpleDraweeView.getLayoutParams().height= showImageHeight;
+            simpleDraweeView = (ImageView) itemView.findViewById(R.id.photo);
+            simpleDraweeView.getLayoutParams().height= showImageWidth;
         }
     }
 }

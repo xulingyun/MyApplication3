@@ -8,24 +8,23 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
 import wc.xulingyun.com.xly.myapplication.dao.ImageDao;
 import wc.xulingyun.com.xly.myapplication.http.adapter.PhotoAdapter;
-import wc.xulingyun.com.xly.myapplication.http.adapter.RecycleViewDivider;
-import wc.xulingyun.com.xly.myapplication.util.*;
 
 import static android.R.attr.key;
-import static wc.xulingyun.com.xly.myapplication.StringUtils.timeStampToDate;
 
 /**
  * Created by 徐玲郓 on 2016/11/1.
@@ -34,7 +33,7 @@ import static wc.xulingyun.com.xly.myapplication.StringUtils.timeStampToDate;
 
 public class PhotoFragment extends Fragment {
     RecyclerView mRecyclerView;
-    public final static int spanCount = 4;
+    public final static int spanCount = 3;
     private HashMap<String, List<ImageDao>> mGruopMap = new HashMap<String, List<ImageDao>>();
 
     @Nullable
@@ -44,7 +43,7 @@ public class PhotoFragment extends Fragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.local_music_recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new RecycleViewDivider(getContext(),LinearLayoutManager.HORIZONTAL));
+//        mRecyclerView.addItemDecoration(new RecycleViewDivider(getContext(),LinearLayoutManager.HORIZONTAL));
         scanPhoto();
         return view;
     }
@@ -63,8 +62,10 @@ public class PhotoFragment extends Fragment {
             int i = lCursor.getColumnIndex(MediaStore.Images.Media.DATA);
             int j = lCursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME);
             int k = lCursor.getColumnIndex(MediaStore.Images.Media.DATE_MODIFIED);
+            int l = lCursor.getColumnIndex(MediaStore.Images.Media.WIDTH);
+            int m = lCursor.getColumnIndex(MediaStore.Images.Media.HEIGHT);
             String key = StringUtils.timeStampToDate(lCursor.getString(k));
-            mImageDao = new ImageDao(lCursor.getString(j),lCursor.getString(i));
+            mImageDao = new ImageDao(lCursor.getString(j),lCursor.getString(i),lCursor.getInt(l),lCursor.getInt(m));
 
             if(!mGruopMap.containsKey(key)){
                 List<ImageDao> temp_list = new ArrayList<>();
@@ -74,8 +75,14 @@ public class PhotoFragment extends Fragment {
             }else{
                 mGruopMap.get(key).add(mImageDao);
             }
-//            list.add(mImageDao);
         }
+        Collections.sort(listKey, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return -o1.compareTo(o2);
+            }
+        });
+
         lCursor.close();
         mRecyclerView.setAdapter(new PhotoAdapter(getActivity(),mGruopMap,listKey));
 

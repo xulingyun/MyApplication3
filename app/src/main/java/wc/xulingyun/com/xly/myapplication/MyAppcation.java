@@ -2,6 +2,7 @@ package wc.xulingyun.com.xly.myapplication;
 
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -64,6 +65,7 @@ public class MyAppcation extends Application{
 //                .setProgressiveJpegConfig(progressiveJpegConfig)
 //                .setRequestListeners(requestListeners)
 //                .setSmallImageDiskCacheConfig(smallImageDiskCacheConfig)
+                .setBitmapsConfig(Bitmap.Config.RGB_565)
                 .build();
 
         Fresco.initialize(this,config);
