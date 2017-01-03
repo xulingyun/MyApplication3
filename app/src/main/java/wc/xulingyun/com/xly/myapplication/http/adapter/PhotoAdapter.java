@@ -15,7 +15,6 @@ import java.util.List;
 import wc.xulingyun.com.xly.myapplication.R;
 import wc.xulingyun.com.xly.myapplication.dao.ImageDao;
 import wc.xulingyun.com.xly.myapplication.http.util.Utils;
-import wc.xulingyun.com.xly.myapplication.view.SpacesItemDecoration;
 
 import static wc.xulingyun.com.xly.myapplication.PhotoFragment.spanCount;
 
@@ -54,14 +53,15 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ImageVH>{
         holder.title.setText(list.get(position));
         holder.mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(spanCount,StaggeredGridLayoutManager.VERTICAL));
 //        holder.mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        SpacesItemDecoration decoration=new SpacesItemDecoration(8);
-        holder.mRecyclerView.addItemDecoration(decoration);
+//        SpacesItemDecoration decoration=new SpacesItemDecoration(8);
+//        holder.mRecyclerView.addItemDecoration(decoration);
 //        holder.mRecyclerView.addItemDecoration(new RecycleViewDivider(context, LinearLayoutManager.HORIZONTAL));
         holder.mRecyclerView.setAdapter(new PhotoItemAdapter(context,map.get(list.get(position))));
     }
 
     @Override
     public int getItemCount() {
+        System.out.println("------PhotoAdapter：getItemCount"+list.size());
         return list.size();
     }
 

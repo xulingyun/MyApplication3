@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,13 +34,17 @@ import static android.R.attr.key;
 
 public class PhotoFragment extends Fragment {
     RecyclerView mRecyclerView;
+    Toolbar mToolbar;
     public final static int spanCount = 3;
-    private HashMap<String, List<ImageDao>> mGruopMap = new HashMap<String, List<ImageDao>>();
+    private static final int off_y = 2;
+    private HashMap<String, List<ImageDao>> mGruopMap = new HashMap<>();
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.photo_fragment,container,false);
+        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        mToolbar.setTitle("照片");
         mRecyclerView = (RecyclerView) view.findViewById(R.id.local_music_recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -48,6 +53,11 @@ public class PhotoFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        System.out.println("------onDestroyView");
+    }
 
     private void scanPhoto(){
         ContentResolver lContentResolver = getActivity().getContentResolver();
@@ -56,7 +66,8 @@ public class PhotoFragment extends Fragment {
         if(lCursor==null){
             return;
         }
-        ArrayList<String> listKey = new ArrayList<>();
+        mGruopMap.clear();
+        final ArrayList<String> listKey = new ArrayList<>();
         ImageDao mImageDao;
         while (lCursor.moveToNext()){
             int i = lCursor.getColumnIndex(MediaStore.Images.Media.DATA);
@@ -66,7 +77,9 @@ public class PhotoFragment extends Fragment {
             int m = lCursor.getColumnIndex(MediaStore.Images.Media.HEIGHT);
             String key = StringUtils.timeStampToDate(lCursor.getString(k));
             mImageDao = new ImageDao(lCursor.getString(j),lCursor.getString(i),lCursor.getInt(l),lCursor.getInt(m));
-
+            if(mImageDao.getHeight()<=0||mImageDao.getWidth()<=0){
+                continue;
+            }
             if(!mGruopMap.containsKey(key)){
                 List<ImageDao> temp_list = new ArrayList<>();
                 temp_list.add(mImageDao);
@@ -82,10 +95,33 @@ public class PhotoFragment extends Fragment {
                 return -o1.compareTo(o2);
             }
         });
-
         lCursor.close();
         mRecyclerView.setAdapter(new PhotoAdapter(getActivity(),mGruopMap,listKey));
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (off_y < Math.abs(dy)) {
+                    if (dy > 0) {
+                        ((MainActivity) getActivity()).hideBottomMenu();
+                    } else if (dy < 0) {
+                        ((MainActivity) getActivity()).showBottomMenu();
+                    }
+                }
+            }
 
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                if (layoutManager instanceof LinearLayoutManager) {
+                    LinearLayoutManager linearManager = (LinearLayoutManager) layoutManager;
+                    int firstItemPosition = linearManager.findFirstVisibleItemPosition();
+                    if(listKey.size()>firstItemPosition)
+                        mToolbar.setTitle(listKey.get(firstItemPosition));
+                }
+            }
+        });
 
 //        Observable.just(lCursor)
 //                .subscribeOn(Schedulers.io()) // 指定 subscribe() 发生在 IO 线程

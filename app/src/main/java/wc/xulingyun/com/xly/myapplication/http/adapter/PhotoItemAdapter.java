@@ -62,7 +62,6 @@ public class PhotoItemAdapter extends RecyclerView.Adapter<PhotoItemAdapter.Imag
                 .config(Bitmap.Config.RGB_565)
                 .centerInside()
                 .into(holder.simpleDraweeView);
-        System.out.println("屏幕的宽："+width+",宽："+showImageWidth+",高："+dynamicsHeight);
     }
 
     @Override
