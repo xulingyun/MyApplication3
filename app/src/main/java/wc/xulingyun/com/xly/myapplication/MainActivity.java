@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements OnShowOrHideListe
         getFirstBottomHeight();
 
         TotalMusicFragment lFragment1 = new TotalMusicFragment();
-//        MusicFragment lFragment2 = MusicFragment.newInstance("11");
         PhotoFragment lFragment2 = new PhotoFragment();
         TotalContactsFragment lFragment3 = new TotalContactsFragment();
         KuaidiFragment lFragment4 = new KuaidiFragment();
@@ -117,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements OnShowOrHideListe
      * 界面颜色的更改
      */
     @SuppressLint("NewApi")
-    private void colorChange(final int position) {
+    public void colorChange(final int position) {
         // 用来提取颜色的Bitmap
         Bitmap bitmap;
         if(position==0){
@@ -270,5 +269,4 @@ public class MainActivity extends AppCompatActivity implements OnShowOrHideListe
         animatorSet.playTogether(valueAnimator,alpha);
         animatorSet.start();
     }
-
 }

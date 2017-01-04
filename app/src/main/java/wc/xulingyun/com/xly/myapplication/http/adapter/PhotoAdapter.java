@@ -1,6 +1,8 @@
 package wc.xulingyun.com.xly.myapplication.http.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -13,7 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import wc.xulingyun.com.xly.myapplication.R;
+import wc.xulingyun.com.xly.myapplication.activity.ScanImageActivity;
 import wc.xulingyun.com.xly.myapplication.dao.ImageDao;
+import wc.xulingyun.com.xly.myapplication.dao.SerializableMap;
 import wc.xulingyun.com.xly.myapplication.http.util.Utils;
 
 import static wc.xulingyun.com.xly.myapplication.PhotoFragment.spanCount;
@@ -49,19 +53,35 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ImageVH>{
     }
 
     @Override
-    public void onBindViewHolder(ImageVH holder, int position) {
+    public void onBindViewHolder(ImageVH holder, final int position) {
         holder.title.setText(list.get(position));
         holder.mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(spanCount,StaggeredGridLayoutManager.VERTICAL));
 //        holder.mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 //        SpacesItemDecoration decoration=new SpacesItemDecoration(8);
 //        holder.mRecyclerView.addItemDecoration(decoration);
 //        holder.mRecyclerView.addItemDecoration(new RecycleViewDivider(context, LinearLayoutManager.HORIZONTAL));
-        holder.mRecyclerView.setAdapter(new PhotoItemAdapter(context,map.get(list.get(position))));
+        PhotoItemAdapter adapter = new PhotoItemAdapter(context,map.get(list.get(position)),
+            new OnItemListener() {
+                @Override
+                public void onClick(View $View, int postion) {
+                    System.out.println("------postion:"+postion);
+                    Intent lIntent = new Intent(context, ScanImageActivity.class);
+                    lIntent.putExtra("index",position);
+                    SerializableMap mSerializableMap = new SerializableMap();
+                    mSerializableMap.setMap(map);
+                    mSerializableMap.setListKey(list);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("totalMap",mSerializableMap);
+                    lIntent.putExtras(bundle);
+                    context.startActivity(lIntent);
+                }
+            }
+        );
+        holder.mRecyclerView.setAdapter(adapter);
     }
 
     @Override
     public int getItemCount() {
-        System.out.println("------PhotoAdapter：getItemCount"+list.size());
         return list.size();
     }
 

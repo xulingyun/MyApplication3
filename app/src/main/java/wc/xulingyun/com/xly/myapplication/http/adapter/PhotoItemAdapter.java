@@ -34,9 +34,12 @@ public class PhotoItemAdapter extends RecyclerView.Adapter<PhotoItemAdapter.Imag
     private ViewGroup.LayoutParams lp;
     private int dynamicsHeight;
 
-    public PhotoItemAdapter(Context context, List<ImageDao> list) {
+    OnItemListener mOnItemListener;
+
+    public PhotoItemAdapter(Context context, List<ImageDao> list,OnItemListener listener) {
         this.mContext = context;
         this.list = list;
+        this.mOnItemListener = listener;
         mInflater = LayoutInflater.from(context);
         width = Utils.getWindowWidth(context);
         showImageWidth = (int)((width-70)*1.0f/ spanCount);
@@ -45,7 +48,7 @@ public class PhotoItemAdapter extends RecyclerView.Adapter<PhotoItemAdapter.Imag
     @Override
     public ImageVH onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.photo_item_xv,parent,false);
-        return new ImageVH(view);
+        return new ImageVH(view,mOnItemListener);
     }
 
     @Override
@@ -69,14 +72,25 @@ public class PhotoItemAdapter extends RecyclerView.Adapter<PhotoItemAdapter.Imag
         return list.size();
     }
 
-    class ImageVH extends RecyclerView.ViewHolder{
+    class ImageVH extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView simpleDraweeView;
+        OnItemListener mListener;
 
 
-        public ImageVH(View itemView) {
+        public ImageVH(View itemView,OnItemListener listener) {
             super(itemView);
+            mListener = listener;
+            itemView.setOnClickListener(this);
             simpleDraweeView = (ImageView) itemView.findViewById(R.id.photo);
             simpleDraweeView.getLayoutParams().height= showImageWidth;
+        }
+
+        @Override
+        public void onClick(View v) {
+            if(mListener==null)
+                return;
+            mListener.onClick(v,getAdapterPosition());
+
         }
     }
 }

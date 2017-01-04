@@ -32,4 +32,10 @@
         <item name="android:paddingRight">16dip</item>
     </style>
 
+    <style name="setup_theme" parent="AppTheme.NoActionBar">
+
+        <item name="android:background">@drawable/setup</item>
+
+    </style>
+
 </resources>
