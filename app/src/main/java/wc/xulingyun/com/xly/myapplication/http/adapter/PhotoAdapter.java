@@ -64,14 +64,14 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ImageVH>{
             new OnItemListener() {
                 @Override
                 public void onClick(View $View, int postion) {
-                    System.out.println("------postion:"+postion);
                     Intent lIntent = new Intent(context, ScanImageActivity.class);
-                    lIntent.putExtra("index",position);
                     SerializableMap mSerializableMap = new SerializableMap();
                     mSerializableMap.setMap(map);
                     mSerializableMap.setListKey(list);
+                    mSerializableMap.setIndex(postion);
+                    mSerializableMap.setListIndex(position);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("totalMap",mSerializableMap);
+                    bundle.putParcelable("totalMap",mSerializableMap);
                     lIntent.putExtras(bundle);
                     context.startActivity(lIntent);
                 }
@@ -94,7 +94,6 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ImageVH>{
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title);
             mRecyclerView = (RecyclerView) itemView.findViewById(R.id.item_recycler);
-//            simpleDraweeView.getLayoutParams().height= showImageHeight;
         }
     }
 }
