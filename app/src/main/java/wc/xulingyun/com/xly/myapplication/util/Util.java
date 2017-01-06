@@ -3,6 +3,7 @@ package wc.xulingyun.com.xly.myapplication.util;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Util {
 
@@ -29,7 +30,7 @@ public class Util {
     }
 
     public static String formatTime(int time){
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss", Locale.CHINA);
         Date d1=new Date(time);
         return format.format(d1);
     }

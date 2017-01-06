@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.squareup.picasso.MemoryPolicy;
@@ -25,9 +27,7 @@ import butterknife.Unbinder;
 import wc.xulingyun.com.xly.myapplication.R;
 import wc.xulingyun.com.xly.myapplication.dao.ImageDao;
 import wc.xulingyun.com.xly.myapplication.dao.SerializableMap;
-
-import static android.R.attr.bitmap;
-import static cn.finalteam.loadingviewfinal.util.PtrLocalDisplay.dp2px;
+import wc.xulingyun.com.xly.myapplication.http.util.Utils;
 
 public class ScanImageActivity extends AppCompatActivity {
 
@@ -45,11 +45,15 @@ public class ScanImageActivity extends AppCompatActivity {
     int jishu = 0;
     ArrayList<ImageDao> list;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_sacn_image);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
         mUnBinder = ButterKnife.bind(this);
 
         mSerializableMap = getIntent().getParcelableExtra("totalMap");
@@ -57,7 +61,6 @@ public class ScanImageActivity extends AppCompatActivity {
         ArrayList<String> serializableList = mSerializableMap.getListKey();
         listIndex = mSerializableMap.getListIndex();
         index = mSerializableMap.getIndex();
-        System.out.println("listIndex:"+listIndex+",index:"+index);
 
         totalNum = 0;
         jishu = 0;
@@ -92,6 +95,7 @@ public class ScanImageActivity extends AppCompatActivity {
 
             @Override
             public void destroyItem(ViewGroup container, int position, Object object) {
+                image_list.get(position).setImageBitmap(null);
                 container.removeView(image_list.get(position));
             }
 
@@ -100,9 +104,10 @@ public class ScanImageActivity extends AppCompatActivity {
                 ImageView iv = image_list.get(position);
 //                Bitmap b = getBitmap(list.get(position).getPath());
 //                iv.setImageBitmap(b);
+                int[] wh = getBitmap(list.get(position).getPath());
                 Picasso.with(ScanImageActivity.this.getApplicationContext())
                         .load(Uri.parse("file://"+list.get(position).getPath()))
-                        .resize(250,250)
+                        .resize(wh[0],wh[1])
                         .memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
                         .config(Bitmap.Config.RGB_565)
                         .centerInside()
@@ -120,10 +125,22 @@ public class ScanImageActivity extends AppCompatActivity {
         mUnBinder.unbind();
     }
 
-    public Bitmap getBitmap(String path) {
+    public int[] getBitmap(String path) {
         BitmapFactory.Options options = new BitmapFactory.Options();
-//        options.inJustDecodeBounds = true;
-        options.inPreferredConfig = Bitmap.Config.RGB_565;
-        return BitmapFactory.decodeFile(path);
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, options);
+        int[] wh = Utils.getScreenWH(this);
+        int scale =1;
+        while (true){
+            int tempW = options.outWidth / scale;
+            int tempH = options.outHeight / scale;
+            if (tempW < wh[0] && tempH < wh[1]) {
+                wh[0] = tempW;
+                wh[1] = tempH;
+                break;
+            }
+            scale++;
+        }
+        return wh;
     }
 }
