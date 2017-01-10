@@ -44,7 +44,7 @@ public class ContactsAdapter extends IndexableAdapter<ContactsEntity>{
     public void onBindContentViewHolder(ViewHolder holder, ContactsEntity entity) {
         ContactsContentVH vh = (ContactsContentVH)holder;
         vh.name.setText(entity.getName());
-        vh.telphone.setText(entity.getTelphone()+"");
+        vh.telphone.setText(entity.getTelphone());
     }
 
     class ContactsContentVH extends ViewHolder{

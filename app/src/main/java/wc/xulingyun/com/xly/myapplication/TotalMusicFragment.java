@@ -29,7 +29,6 @@ public class TotalMusicFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.app_bar_main,container,false);
-        System.out.println("--------------onCreateView");
         mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
         toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.song);

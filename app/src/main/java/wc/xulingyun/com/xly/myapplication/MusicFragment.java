@@ -150,6 +150,7 @@ public class MusicFragment extends BaseFragment implements GetDataCallback<Music
 
     @Override
     public void noData() {
-
+        adapter.setFooterTextView("已经没有歌曲了！");
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 }
